@@ -6,4 +6,6 @@
     android:layout_height="match_parent"
     tools:context=".WorkoutHistory">
 
+    <include layout="@layout/nav_bar"></include>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

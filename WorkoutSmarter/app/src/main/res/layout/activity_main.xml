@@ -4,44 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    app:layout_constraintCircleRadius="10dp"
     tools:context=".MainActivity">
 
-    <LinearLayout
-        android:layout_width="370dp"
-        android:layout_height="113dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginBottom="8dp"
-        android:orientation="horizontal"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
-
-        <ImageButton
-            android:id="@+id/historyButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:contentDescription="@string/history_button"
-            android:scaleType="fitCenter"
-            app:srcCompat="@drawable/ic_history" />
-
-        <ImageButton
-            android:id="@+id/mainButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:contentDescription="@string/main_button"
-            android:scaleType="fitCenter"
-            app:srcCompat="@drawable/ic_dumbell" />
-
-        <ImageButton
-            android:id="@+id/mapButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:contentDescription="@string/map_button"
-            android:scaleType="fitCenter"
-            app:srcCompat="@drawable/ic_map" />
-    </LinearLayout>
+    <include layout="@layout/nav_bar"></include>
 </androidx.constraintlayout.widget.ConstraintLayout>

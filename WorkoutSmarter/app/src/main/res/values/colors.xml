@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- Using color palette found at https://coolors.co/0b132b-1c2541-3a506b-5bc0be-6fffe9 -->
     <color name="colorPrimary">#6200EE</color>
     <color name="colorPrimaryDark">#3700B3</color>
     <color name="colorAccent">#03DAC5</color>
+    <color name="navbar_background">#3e6594</color>
+    <color name="navbar_button_background">#a9dbd3</color>
 </resources>
