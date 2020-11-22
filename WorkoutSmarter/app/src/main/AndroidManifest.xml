@@ -9,7 +9,8 @@
         android:roundIcon="@mipmap/workout_smarter_launcher"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".WorkoutHistory"></activity>
+        <activity android:name=".GymMap"></activity>
+        <activity android:name=".WorkoutHistory" />
         <activity android:name=".WorkoutList" />
         <activity android:name=".MainActivity">
             <intent-filter>
