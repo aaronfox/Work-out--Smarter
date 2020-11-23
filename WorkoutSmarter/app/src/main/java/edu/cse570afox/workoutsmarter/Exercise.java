@@ -6,7 +6,7 @@ public class Exercise {
     private String exerciseName;
     private int calories;
     private int reps;
-    private String musclesWorked;
+    private String muscleGroupWorked;
 
     public int getCalories() {
         return calories;
@@ -40,11 +40,13 @@ public class Exercise {
         this.exerciseName = exerciseName;
     }
 
-    public String getMusclesWorked() {
-        return musclesWorked;
+    public String getMuscleGroupWorked() {
+        return muscleGroupWorked;
     }
 
-    public void setMusclesWorked(String musclesWorked) {
-        this.musclesWorked = musclesWorked;
+    public void setMuscleGroupWorked(String muscleGroupWorked) {
+        this.muscleGroupWorked = muscleGroupWorked;
     }
+
+
 }

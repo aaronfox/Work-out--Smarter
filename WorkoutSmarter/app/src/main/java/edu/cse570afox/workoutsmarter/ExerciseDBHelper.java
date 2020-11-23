@@ -16,7 +16,7 @@ public class ExerciseDBHelper extends SQLiteOpenHelper {
                     + "exercisename text not null,"
                     + "calories integer,"
                     + "reps integer,"
-                    + "musclesworked text;";
+                    + "musclegroupworked text;";
 
     public ExerciseDBHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);

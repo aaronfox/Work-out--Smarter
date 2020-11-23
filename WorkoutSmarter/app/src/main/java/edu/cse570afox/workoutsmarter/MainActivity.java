@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageButton;
 
 public class MainActivity extends AppCompatActivity {
@@ -19,6 +20,7 @@ public class MainActivity extends AppCompatActivity {
         // Init buttons
         initHistoryButton();
         initMapButton();
+        initAddNewWorkoutButton();
     }
 
     private void initHistoryButton() {
@@ -43,5 +45,15 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    private void initAddNewWorkoutButton() {
+        Button bAddNewWorkout = findViewById(R.id.addNewWorkoutButton);
+        bAddNewWorkout.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View view) {
+                Intent intent = new Intent(MainActivity.this, WorkoutList.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(intent);
+            }
+        });
+    }
 
 }
