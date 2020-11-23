@@ -8,6 +8,10 @@ public class Exercise {
     private int reps;
     private String muscleGroupWorked;
 
+    public Exercise() {
+        exerciseID = -1;
+    }
+
     public int getCalories() {
         return calories;
     }

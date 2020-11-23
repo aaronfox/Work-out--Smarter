@@ -11,6 +11,8 @@ import android.widget.Spinner;
 
 public class WorkoutList extends AppCompatActivity {
 
+    private static final String TAG = "WorkoutList";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

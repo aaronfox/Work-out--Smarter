@@ -40,7 +40,7 @@
                     android:text="Exercise Name:" />
 
                 <EditText
-                    android:id="@+id/editTextTextPersonName2"
+                    android:id="@+id/exerciseNameEditText"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -62,7 +62,7 @@
                     android:text="Calories Burned:" />
 
                 <EditText
-                    android:id="@+id/editTextNumber2"
+                    android:id="@+id/caloriesBurnedEditText"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -83,7 +83,7 @@
                     android:text="Muscle Group:" />
 
                 <Spinner
-                    android:id="@+id/spinner3"
+                    android:id="@+id/muscleGroupSpinner"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1" />
@@ -102,7 +102,7 @@
                     android:text="Reps:" />
 
                 <EditText
-                    android:id="@+id/editTextNumber3"
+                    android:id="@+id/repsEditText"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
