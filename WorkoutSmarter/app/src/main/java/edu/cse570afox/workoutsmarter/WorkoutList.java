@@ -3,10 +3,15 @@ package edu.cse570afox.workoutsmarter;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CursorAdapter;
+import android.widget.SimpleCursorAdapter;
 import android.widget.Spinner;
 
 public class WorkoutList extends AppCompatActivity {
@@ -24,13 +29,64 @@ public class WorkoutList extends AppCompatActivity {
 
         // Spinner element
         // Reference: https://developer.android.com/guide/topics/ui/controls/spinner#java
-        Spinner spinner = (Spinner) findViewById(R.id.spinner);
+        Spinner workoutGroupToAddSpinner = (Spinner) findViewById(R.id.workoutGroupToAddSpinner);
+        // Create an ArrayAdapter using the string array and a default spinner layout
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
+                R.array.muscle_group_array, android.R.layout.simple_spinner_item);
+        // Specify the layout to use when the list of choices appears
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        // Apply the adapter to the spinner
+        workoutGroupToAddSpinner.setAdapter(adapter);
+
+        changeAddExerciseSpinnerData();
 
         // CursorAdapter
-        // TODO: implement cursoradapter
-//        CursorAdapter adapter = CursorAdapter.
         // Spinner click listener
-//        spinner.setOnItemSelectedListener(this);
+//        workoutGroupToAddSpinner.setOnItemSelectedListener(this);
+        workoutGroupToAddSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                changeAddExerciseSpinnerData();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+    }
+
+    private void changeAddExerciseSpinnerData() {
+        Spinner workoutGroupToAddSpinner = (Spinner) findViewById(R.id.workoutGroupToAddSpinner);
+        //Spinner for adding exercise
+        Spinner addExerciseSpinner = (Spinner) findViewById(R.id.addExerciseSpinner);
+        // Get Muscle group to use in query
+        String currMuscleGroup = workoutGroupToAddSpinner.getSelectedItem().toString();
+//        ExerciseDataSource ds =
+//        String query = "Select from exercise";
+//        Cursor cursor = database.rawQuery(query, null);
+        String[] queryCols = new String[]{"_id", "exercisename"};
+        SQLiteDatabase db = new ExerciseDBHelper(this).getReadableDatabase();
+        String[] group_to_work = new String[] {currMuscleGroup};
+        // Query explanation: https://stackoverflow.com/questions/10600670/sqlitedatabase-query-method
+        Cursor cursor = db.query(
+                "exercise", // the table to query
+                queryCols,                              // the columns to return
+                "musclegroupworked = ?",       // the columns for the WHERE clause
+                group_to_work,                          // the values for the WHERE clause
+                null,                          // don't group the rows
+                null,                           // don't filter by row groups
+                "exercisename"                 // sort by exercise name
+        );
+
+        // Spinner example reference: https://en.proft.me/2016/10/20/spinner-example-android/
+
+        String[] adapterCols = new String[]{"exercisename"};
+        int[] adapterRowViews = new int[]{android.R.id.text1};
+        SimpleCursorAdapter cursorAdapter = new SimpleCursorAdapter(
+                this, android.R.layout.simple_spinner_item, cursor, adapterCols, adapterRowViews, 0);
+        cursorAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        addExerciseSpinner.setAdapter(cursorAdapter);
     }
 
     private void initAddNewExerciseButton() {

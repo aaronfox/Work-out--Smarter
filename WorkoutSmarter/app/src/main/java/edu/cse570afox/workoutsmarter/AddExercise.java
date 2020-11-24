@@ -7,6 +7,7 @@ import android.database.Cursor;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
@@ -20,6 +21,17 @@ public class AddExercise extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_exercise);
+
+        // Muscle Group Spinner
+        Spinner spMuscleGroup = (Spinner) findViewById(R.id.muscleGroupSpinner);
+
+        // Create an ArrayAdapter using the string array and a default spinner layout
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
+                R.array.muscle_group_array, android.R.layout.simple_spinner_item);
+        // Specify the layout to use when the list of choices appears
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        // Apply the adapter to the spinner
+        spMuscleGroup.setAdapter(adapter);
 
         initSaveNewExerciseButton();
     }
@@ -37,10 +49,10 @@ public class AddExercise extends AppCompatActivity {
                 final EditText etCaloriesBurned = (EditText) findViewById(R.id.caloriesBurnedEditText);
                 currentExercise.setCalories(Integer.parseInt(etCaloriesBurned.getText().toString()));
 
-                // TODO: get spinner info
+                // TODO: get spinner info for Muscle Group too
                 // Muscle Group
                 final Spinner spMuscleGroup = (Spinner) findViewById(R.id.muscleGroupSpinner);
-                currentExercise.setMuscleGroupWorked("Test Group");
+                currentExercise.setMuscleGroupWorked(spMuscleGroup.getSelectedItem().toString());
 
                 // Calories Burned
                 final EditText etReps = (EditText) findViewById(R.id.repsEditText);

@@ -4,4 +4,12 @@
     <string name="history_button">History Button</string>
     <string name="map_button">Map Button</string>
     <string name="add_new_workout">Add New Workout</string>
+    <string-array name="muscle_group_array">
+        <item>Legs</item>
+        <item>Arms</item>
+        <item>Back</item>
+        <item>Chest</item>
+        <item>Abs</item>
+        <item>Shoulders</item>
+    </string-array>
 </resources>

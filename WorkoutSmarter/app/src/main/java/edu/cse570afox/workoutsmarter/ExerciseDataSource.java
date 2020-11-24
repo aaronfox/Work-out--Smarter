@@ -6,7 +6,6 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
 import java.sql.SQLException;
-// TODO: Continue where left off on page 14 of Lecture 5 part 2
 public class ExerciseDataSource {
 
     private SQLiteDatabase database;
