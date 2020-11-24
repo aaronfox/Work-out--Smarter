@@ -6,6 +6,9 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Calendar;
+
 public class ExerciseDataSource {
 
     private SQLiteDatabase database;
@@ -74,5 +77,44 @@ public class ExerciseDataSource {
             lastID = -1;
         }
         return lastID;
+    }
+
+    // TODO: implement means of displaying needed data to recyclerview when user adds an exercise to a workout
+    public ArrayList<String> getExercises(String sortField, String sortOrder) {
+        ArrayList<Exercise> exercises = new ArrayList<Exercise>();
+        ArrayList<String> exerciseNames = new ArrayList<String>();
+
+        try {
+            String query = "SELECT  * FROM exercise";
+            Cursor cursor = database.rawQuery(query, null);
+
+            Exercise newExercise;
+            cursor.moveToFirst();
+            while (!cursor.isAfterLast()) {
+                newExercise = new Exercise();
+                newExercise.setExerciseID(cursor.getInt(0));
+                newExercise.setExerciseName(cursor.getString(1));
+//                newContact.setStreetAddress(cursor.getString(2));
+//                newContact.setCity(cursor.getString(3));
+//                newContact.setState(cursor.getString(4));
+//                newContact.setZipCode(cursor.getString(5));
+//                newContact.setPhoneNumber(cursor.getString(6));
+//                newContact.setCellNumber(cursor.getString(7));
+//                newContact.seteMail(cursor.getString(8));
+//                Calendar calendar = Calendar.getInstance();
+//                calendar.setTimeInMillis(Long.valueOf(cursor.getString(9)));
+//                newContact.setBirthday(calendar);
+                exercises.add(newExercise);
+                exerciseNames.add(cursor.getString(1));
+                cursor.moveToNext();
+            }
+            cursor.close();
+        }
+        catch (Exception e) {
+            exercises = new ArrayList<Exercise>();
+            exerciseNames = new ArrayList<String>();
+        }
+//        return exercises;
+        return exerciseNames;
     }
 }

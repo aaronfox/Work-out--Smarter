@@ -1,6 +1,8 @@
 package edu.cse570afox.workoutsmarter;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.database.Cursor;
@@ -13,6 +15,9 @@ import android.widget.Button;
 import android.widget.CursorAdapter;
 import android.widget.SimpleCursorAdapter;
 import android.widget.Spinner;
+import android.widget.Toast;
+
+import java.util.ArrayList;
 
 public class WorkoutList extends AppCompatActivity {
 
@@ -27,6 +32,22 @@ public class WorkoutList extends AppCompatActivity {
         initAddNewExerciseButton();
         initSaveWorkoutButton();
 
+        ExerciseDataSource ds = new ExerciseDataSource(this);
+        ArrayList<String> exerciseNames;
+        try {
+            ds.open();
+            exerciseNames = ds.getExercises("a", "b");
+            ds.close();
+            RecyclerView exerciseList = findViewById(R.id.rvCurrentWorkoutPlan);
+            RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
+            exerciseList.setLayoutManager(layoutManager);
+            ExerciseAdapter exerciseAdapter = new ExerciseAdapter(exerciseNames);
+            exerciseList.setAdapter(exerciseAdapter);
+        }
+        catch (Exception e) {
+            Toast.makeText(this, "Error retrieving exercises", Toast.LENGTH_LONG).show();
+        }
+
         // Spinner element
         // Reference: https://developer.android.com/guide/topics/ui/controls/spinner#java
         Spinner workoutGroupToAddSpinner = (Spinner) findViewById(R.id.workoutGroupToAddSpinner);
@@ -38,11 +59,10 @@ public class WorkoutList extends AppCompatActivity {
         // Apply the adapter to the spinner
         workoutGroupToAddSpinner.setAdapter(adapter);
 
+        // Initialize data in add exercise spinner
         changeAddExerciseSpinnerData();
 
-        // CursorAdapter
-        // Spinner click listener
-//        workoutGroupToAddSpinner.setOnItemSelectedListener(this);
+        // workoutGroupToAddSpinner click listener
         workoutGroupToAddSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {

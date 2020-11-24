@@ -52,15 +52,16 @@
         app:layout_constraintTop_toBottomOf="@+id/addExerciseSpinner" />
 
     <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvCurrentWorkoutPlan"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
         app:layout_constraintBottom_toTopOf="@+id/saveWorkoutButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/addExerciseSpinner" />
+        app:layout_constraintTop_toBottomOf="@+id/currentWorkoutPlanTextView" />
 
     <Button
         android:id="@+id/saveWorkoutButton"
