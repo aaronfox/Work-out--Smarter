@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -22,7 +23,19 @@ import java.util.ArrayList;
 public class WorkoutList extends AppCompatActivity {
 
     private static final String TAG = "WorkoutList";
+    private ArrayList<Exercise> exercises;
+    private ArrayList<Exercise> currentExercisesInWorkout = new ArrayList<Exercise>();
 
+    private View.OnClickListener onItemClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            RecyclerView.ViewHolder viewHolder = (RecyclerView.ViewHolder) view.getTag();
+            int positon = viewHolder.getAdapterPosition();
+            Intent intent = new Intent(WorkoutList.this, MainActivity.class);
+            startActivity(intent);
+        }
+    };
+    // TODO: left off on completing workoutlist on lecture 6 pt 2 page 10
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -31,22 +44,24 @@ public class WorkoutList extends AppCompatActivity {
         // Init buttons
         initAddNewExerciseButton();
         initSaveWorkoutButton();
+        initAddExerciseToWorkoutListButton();
 
-        ExerciseDataSource ds = new ExerciseDataSource(this);
-        ArrayList<String> exerciseNames;
-        try {
-            ds.open();
-            exerciseNames = ds.getExercises("a", "b");
-            ds.close();
-            RecyclerView exerciseList = findViewById(R.id.rvCurrentWorkoutPlan);
-            RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
-            exerciseList.setLayoutManager(layoutManager);
-            ExerciseAdapter exerciseAdapter = new ExerciseAdapter(exerciseNames);
-            exerciseList.setAdapter(exerciseAdapter);
-        }
-        catch (Exception e) {
-            Toast.makeText(this, "Error retrieving exercises", Toast.LENGTH_LONG).show();
-        }
+        // Add items to RecyclerView
+//        ExerciseDataSource ds = new ExerciseDataSource(this);
+//        try {
+//            ds.open();
+//            exercises = ds.getExercises("a", "b");
+//            ds.close();
+//            RecyclerView exerciseList = findViewById(R.id.rvCurrentWorkoutPlan);
+//            RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
+//            exerciseList.setLayoutManager(layoutManager);
+//            ExerciseAdapter exerciseAdapter = new ExerciseAdapter(exercises);
+//            exerciseAdapter.setOnItemClickListener(onItemClickListener);
+//            exerciseList.setAdapter(exerciseAdapter);
+//        }
+//        catch (Exception e) {
+//            Toast.makeText(this, "Error retrieving exercises", Toast.LENGTH_LONG).show();
+//        }
 
         // Spinner element
         // Reference: https://developer.android.com/guide/topics/ui/controls/spinner#java
@@ -129,5 +144,67 @@ public class WorkoutList extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+    }
+
+
+
+    private void initAddExerciseToWorkoutListButton() {
+        Button bAddExercise = findViewById(R.id.addExerciseButton);
+        bAddExercise.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // TODO: add current exercise in exercise spinner
+                Log.d(TAG, "Clicked add button");
+                Spinner addExerciseSpinner = (Spinner) findViewById(R.id.addExerciseSpinner);
+                Cursor stringCursor = (Cursor) addExerciseSpinner.getSelectedItem();
+                String exerciseNameToAdd = stringCursor.getString(stringCursor.getColumnIndex("exercisename"));
+//                stringCursor.close();
+                // TODO: Get actual exercise by exercise name
+                String[] queryCols = new String[]{"_id", "exercisename", "calories", "reps", "musclegroupworked"};
+                SQLiteDatabase db = new ExerciseDBHelper(WorkoutList.this).getReadableDatabase();
+                String[] exercise_name_to_add = new String[] {exerciseNameToAdd};
+                Log.d(TAG, "exerciseNameToAdd == " + exerciseNameToAdd);
+                // Query explanation: https://stackoverflow.com/questions/10600670/sqlitedatabase-query-method
+                Cursor cursor = db.query(
+                        "exercise", // the table to query
+                        queryCols,                              // the columns to return
+                        "exercisename = ?",       // the columns for the WHERE clause
+                        exercise_name_to_add,                          // the values for the WHERE clause
+                        null,                          // don't group the rows
+                        null,                           // don't filter by row groups
+                        null                 // don't sort
+                );
+//                exercises.add(exerciseToAdd);
+                if (cursor.moveToFirst()){
+                    do {
+                        String exerciseNameString = cursor.getString(cursor.getColumnIndex("exercisename"));
+                        int caloriesInt = cursor.getInt(cursor.getColumnIndex("calories"));
+                        int repsInt = cursor.getInt(cursor.getColumnIndex("reps"));
+                        String muscleGroupString =  cursor.getString(cursor.getColumnIndex("musclegroupworked"));
+                        Exercise exerciseToAdd = new Exercise();
+                        exerciseToAdd.setExerciseID(cursor.getInt(cursor.getColumnIndex("_id")));
+                        exerciseToAdd.setExerciseName(exerciseNameString);
+                        exerciseToAdd.setCalories(caloriesInt);
+                        exerciseToAdd.setReps(repsInt);
+                        exerciseToAdd.setMuscleGroupWorked(muscleGroupString);
+                        currentExercisesInWorkout.add(exerciseToAdd);
+                        updateRecyclerView();
+                        // TODO: Add the above data to Recycler View instead of just printing it
+                        Log.d(TAG," WOO " + exerciseNameString + " " + caloriesInt + " " + repsInt + " " + muscleGroupString);
+                    } while(cursor.moveToNext());
+                }
+//                cursor.close();
+//                Log.d(TAG,"hellllo: " + cursor.getString(0));//cursor.getString(2) + " " + cursor.getString(4));
+            }
+        });
+    }
+
+    private void updateRecyclerView() {
+        RecyclerView exerciseList = findViewById(R.id.rvCurrentWorkoutPlan);
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
+        exerciseList.setLayoutManager(layoutManager);
+        ExerciseAdapter exerciseAdapter = new ExerciseAdapter(currentExercisesInWorkout);
+        exerciseAdapter.setOnItemClickListener(onItemClickListener);
+        exerciseList.setAdapter(exerciseAdapter);
     }
 }

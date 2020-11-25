@@ -80,9 +80,9 @@ public class ExerciseDataSource {
     }
 
     // TODO: implement means of displaying needed data to recyclerview when user adds an exercise to a workout
-    public ArrayList<String> getExercises(String sortField, String sortOrder) {
+    public ArrayList<Exercise> getExercises(String sortField, String sortOrder) {
         ArrayList<Exercise> exercises = new ArrayList<Exercise>();
-        ArrayList<String> exerciseNames = new ArrayList<String>();
+//        ArrayList<String> exerciseNames = new ArrayList<String>();
 
         try {
             String query = "SELECT  * FROM exercise";
@@ -94,6 +94,10 @@ public class ExerciseDataSource {
                 newExercise = new Exercise();
                 newExercise.setExerciseID(cursor.getInt(0));
                 newExercise.setExerciseName(cursor.getString(1));
+                newExercise.setCalories(cursor.getInt(2));
+                newExercise.setReps(cursor.getInt(3));
+                newExercise.setMuscleGroupWorked(cursor.getString(4));
+
 //                newContact.setStreetAddress(cursor.getString(2));
 //                newContact.setCity(cursor.getString(3));
 //                newContact.setState(cursor.getString(4));
@@ -105,16 +109,16 @@ public class ExerciseDataSource {
 //                calendar.setTimeInMillis(Long.valueOf(cursor.getString(9)));
 //                newContact.setBirthday(calendar);
                 exercises.add(newExercise);
-                exerciseNames.add(cursor.getString(1));
+//                exerciseNames.add(cursor.getString(1));
                 cursor.moveToNext();
             }
             cursor.close();
         }
         catch (Exception e) {
             exercises = new ArrayList<Exercise>();
-            exerciseNames = new ArrayList<String>();
+//            exerciseNames = new ArrayList<String>();
         }
-//        return exercises;
-        return exerciseNames;
+        return exercises;
+//        return exerciseNames;
     }
 }
