@@ -14,6 +14,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CursorAdapter;
+import android.widget.EditText;
 import android.widget.SimpleCursorAdapter;
 import android.widget.Spinner;
 import android.widget.Toast;
@@ -25,6 +26,7 @@ public class WorkoutList extends AppCompatActivity {
     private static final String TAG = "WorkoutList";
     private ArrayList<Exercise> exercises;
     private ArrayList<Exercise> currentExercisesInWorkout = new ArrayList<Exercise>();
+    private Workout currentWorkout = new Workout();
 
     private View.OnClickListener onItemClickListener = new View.OnClickListener() {
         @Override
@@ -139,6 +141,55 @@ public class WorkoutList extends AppCompatActivity {
         Button bSaveWorkout = findViewById(R.id.saveWorkoutButton);
         bSaveWorkout.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
+                // Save Workout Data from to currentWorkout
+                // Workout Name
+                final EditText editTextWorkoutName = (EditText) findViewById(R.id.editTextWorkoutName);
+                Log.v(TAG, "editTextWorkoutName.getText().toString() == " + editTextWorkoutName.getText().toString());
+                currentWorkout.setWorkoutName(editTextWorkoutName.getText().toString());
+
+                // Exercises: use currentExercisesInWorkout array to get current exercises
+                StringBuffer sb = new StringBuffer();
+                Exercise currExerciseForLoop;
+                for (int i = 0; i < currentExercisesInWorkout.size(); i++) {
+                    // Serialize data using semicolons
+                    currExerciseForLoop = currentExercisesInWorkout.get(i);
+                    String exerciseStringToAdd = currExerciseForLoop.getExerciseName() + ";"
+                            + currExerciseForLoop.getCalories() + ";"
+                            + currExerciseForLoop.getReps() + ";"
+                            + currExerciseForLoop.getMuscleGroupWorked() + ";";
+
+                    sb.append(exerciseStringToAdd);
+                }
+                // TODO: combine exercise data array into one string for adding into Workout DB
+                String finalStringToAdd = sb.toString();
+                currentWorkout.setExercises(finalStringToAdd);
+
+                // TODO: save workout to SQLite first
+                boolean wasSuccessful = false;
+                WorkoutDataSource ds = new WorkoutDataSource(WorkoutList.this);
+                try {
+                    ds.open();
+
+                    if (currentWorkout.getWorkoutID() == -1) {
+                        wasSuccessful = ds.insertWorkout(currentWorkout);
+                        int newID = ds.getLastWorkoutID();
+                        currentWorkout.setWorkoutID(newID);
+                    }
+                    else {
+                        wasSuccessful = ds.updateWorkout(currentWorkout);
+                    }
+                    ds.close();
+                }
+                catch (Exception e) {
+                    wasSuccessful = false;
+                }
+
+                if(wasSuccessful) {
+                    Log.v(TAG, "SUCCESFULLLLL");
+                }
+
+
+                // END TODO:
                 Intent intent = new Intent(WorkoutList.this, MainActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(intent);

@@ -7,7 +7,11 @@
     app:layout_constraintCircleRadius="10dp"
     tools:context=".MainActivity">
 
-    <include layout="@layout/nav_bar"></include>
+    <include
+        android:id="@+id/include2"
+        layout="@layout/nav_bar"
+        tools:layout_editor_absoluteX="21dp"
+        tools:layout_editor_absoluteY="610dp"></include>
 
     <Button
         android:id="@+id/addNewWorkoutButton"
@@ -20,4 +24,28 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/currentWorkoutsTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:text="Current Workouts:"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/addNewWorkoutButton" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/workoutListRecyclerView"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="16dp"
+        app:layout_constraintBottom_toTopOf="@+id/include2"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/currentWorkoutsTextView" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

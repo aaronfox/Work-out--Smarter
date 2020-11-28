@@ -1,21 +1,55 @@
 package edu.cse570afox.workoutsmarter;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.Toast;
+
+import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
 
     private static final String TAG = "MainWorkoutActivity";
 
+    private View.OnClickListener onItemClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            RecyclerView.ViewHolder viewHolder = (RecyclerView.ViewHolder) view.getTag();
+            int position = viewHolder.getAdapterPosition();
+            Intent intent = new Intent(MainActivity.this, MainActivity.class);
+            startActivity(intent);
+        }
+    };
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        // Set data for RecyclerView
+        WorkoutDataSource ds = new WorkoutDataSource(this);
+        ArrayList<Workout> workouts;
+
+        try {
+            ds.open();
+            workouts = ds.getWorkouts("a", "b");
+            ds.close();
+            RecyclerView workoutList = findViewById(R.id.workoutListRecyclerView);
+            RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
+            workoutList.setLayoutManager(layoutManager);
+            WorkoutAdapter workoutAdapter = new WorkoutAdapter(workouts);
+            workoutAdapter.setOnItemClickListener(onItemClickListener);
+            workoutList.setAdapter(workoutAdapter);
+        }
+        catch (Exception e) {
+            Toast.makeText(this, "Error Retrieving Workouts", Toast.LENGTH_LONG).show();
+        }
 
         // Init buttons
         initHistoryButton();

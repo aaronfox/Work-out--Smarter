@@ -45,11 +45,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="32dp"
         android:text="Current Workout Plan:"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/addExerciseSpinner" />
+        app:layout_constraintTop_toBottomOf="@+id/workoutNameTextView" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvCurrentWorkoutPlan"
@@ -113,4 +113,25 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/workoutGroupToAddTextView"
         app:layout_constraintTop_toTopOf="@+id/workoutGroupToAddTextView" />
+
+    <TextView
+        android:id="@+id/workoutNameTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="32dp"
+        android:text="Workout Name:"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/addExerciseTextView" />
+
+    <EditText
+        android:id="@+id/editTextWorkoutName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:ems="10"
+        android:inputType="textPersonName"
+        app:layout_constraintBottom_toBottomOf="@+id/workoutNameTextView"
+        app:layout_constraintStart_toEndOf="@+id/workoutNameTextView"
+        app:layout_constraintTop_toTopOf="@+id/workoutNameTextView" />
 </androidx.constraintlayout.widget.ConstraintLayout>

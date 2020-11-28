@@ -45,12 +45,12 @@ public class ExerciseDataSource {
     }
 
     public boolean updateExercise(Exercise e) {
-        boolean didSucceed = false;
-        try {
-            Long rowId = (long) e.getExerciseID();
-            ContentValues updateValues = new ContentValues();
+                boolean didSucceed = false;
+                try {
+                    Long rowId = (long) e.getExerciseID();
+                    ContentValues updateValues = new ContentValues();
 
-            updateValues.put("exercisename", e.getExerciseName());
+                    updateValues.put("exercisename", e.getExerciseName());
             updateValues.put("calories", e.getCalories());
             updateValues.put("reps", e.getReps());
             updateValues.put("musclegroupworked", e.getMuscleGroupWorked());
@@ -98,16 +98,6 @@ public class ExerciseDataSource {
                 newExercise.setReps(cursor.getInt(3));
                 newExercise.setMuscleGroupWorked(cursor.getString(4));
 
-//                newContact.setStreetAddress(cursor.getString(2));
-//                newContact.setCity(cursor.getString(3));
-//                newContact.setState(cursor.getString(4));
-//                newContact.setZipCode(cursor.getString(5));
-//                newContact.setPhoneNumber(cursor.getString(6));
-//                newContact.setCellNumber(cursor.getString(7));
-//                newContact.seteMail(cursor.getString(8));
-//                Calendar calendar = Calendar.getInstance();
-//                calendar.setTimeInMillis(Long.valueOf(cursor.getString(9)));
-//                newContact.setBirthday(calendar);
                 exercises.add(newExercise);
 //                exerciseNames.add(cursor.getString(1));
                 cursor.moveToNext();
