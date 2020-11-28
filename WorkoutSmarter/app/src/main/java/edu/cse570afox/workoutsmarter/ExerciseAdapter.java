@@ -57,7 +57,6 @@ public class ExerciseAdapter extends RecyclerView.Adapter {
         ExerciseViewHolder evh = (ExerciseViewHolder) holder;
         evh.getTvExerciseName().setText(exerciseData.get(position).getExerciseName());
         evh.getTvMuscleGroup().setText(exerciseData.get(position).getMuscleGroupWorked());
-
     }
 
     @Override

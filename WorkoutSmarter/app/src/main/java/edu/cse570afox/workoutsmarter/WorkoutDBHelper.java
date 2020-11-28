@@ -7,7 +7,7 @@ import android.util.Log;
 
 public class WorkoutDBHelper extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "workouts.db";
-    private static final int DATABASE_VERSION = 3;
+    private static final int DATABASE_VERSION = 4;
 
     // Database creation sql statement
     private static final String CREATE_TABLE_WORKOUT =

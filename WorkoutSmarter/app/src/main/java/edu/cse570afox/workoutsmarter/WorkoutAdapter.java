@@ -1,5 +1,6 @@
 package edu.cse570afox.workoutsmarter;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -50,9 +51,31 @@ public class WorkoutAdapter extends RecyclerView.Adapter {
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         WorkoutAdapter.WorkoutViewHolder wvh = (WorkoutAdapter.WorkoutViewHolder) holder;
-        // TODO: get number of exercises and place it here
         wvh.getTvWorkoutName().setText(workoutData.get(position).getWorkoutName());
-        wvh.getTvNumExercises().setText("6");//workoutData.get(position).get());
+        // TODO: get number of exercises and place it here
+        // Get number of exercises by querying string and seeing how many semicolons are there
+        Log.d(TAG, "!!! " + workoutData.get(position).getExercises());
+        String[] exercisesInfoStringArray = workoutData.get(position).getExercises().split(";");
+        ArrayList<Exercise>  exercisesInfo = new ArrayList<Exercise>();// workoutData.get(position).getExercises().split(";");
+        for (int i = 0; i < exercisesInfoStringArray.length; i += 4) {
+            Exercise newExercise = new Exercise();
+            // TODO add exercise ID to list
+//            newExercise.setExerciseID(Integer.parseInt(exercisesInfoStringArray[i]));
+            newExercise.setExerciseName(exercisesInfoStringArray[i]);
+            newExercise.setCalories(Integer.parseInt(exercisesInfoStringArray[i + 1]));
+            newExercise.setReps(Integer.parseInt(exercisesInfoStringArray[i + 2]));
+            newExercise.setMuscleGroupWorked(exercisesInfoStringArray[i + 3]);
+
+            exercisesInfo.add(newExercise);
+        }
+//       ArrayList<String> exerciseNames = new String[];
+        for (int i = 0; i < exercisesInfo.size(); i++) {
+            if (i % 4 == 0 ) {
+                Log.v(TAG, "!!!name" + exercisesInfo.get(i).getExerciseName());
+            }
+        }
+//        int sizeOfExercises = (int)(exercisesInfoStringArray.length / 4)
+        wvh.getTvNumExercises().setText("Number of Exercises: " + Integer.toString((exercisesInfoStringArray.length / 4)));//workoutData.get(position).get());
 
 //        evh.getTvMuscleGroup().setText(exerciseData.get(position).getMuscleGroupWorked());
     }
