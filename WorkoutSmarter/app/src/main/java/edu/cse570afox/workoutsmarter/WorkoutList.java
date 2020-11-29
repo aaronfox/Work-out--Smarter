@@ -32,7 +32,7 @@ public class WorkoutList extends AppCompatActivity {
         @Override
         public void onClick(View view) {
             RecyclerView.ViewHolder viewHolder = (RecyclerView.ViewHolder) view.getTag();
-            int positon = viewHolder.getAdapterPosition();
+            int position = viewHolder.getAdapterPosition();
             Intent intent = new Intent(WorkoutList.this, MainActivity.class);
             startActivity(intent);
         }
@@ -144,24 +144,36 @@ public class WorkoutList extends AppCompatActivity {
                 // Save Workout Data from to currentWorkout
                 // Workout Name
                 final EditText editTextWorkoutName = (EditText) findViewById(R.id.editTextWorkoutName);
-                Log.v(TAG, "editTextWorkoutName.getText().toString() == " + editTextWorkoutName.getText().toString());
+                // Make sure User has workout name filled out
+                if (editTextWorkoutName.getText().toString().isEmpty()) {
+                    Toast.makeText(WorkoutList.this,"Please Enter Entire Workout Name", Toast.LENGTH_LONG).show();
+                    return;
+                }
                 currentWorkout.setWorkoutName(editTextWorkoutName.getText().toString());
 
                 // Exercises: use currentExercisesInWorkout array to get current exercises
                 StringBuffer sb = new StringBuffer();
                 Exercise currExerciseForLoop;
-                for (int i = 0; i < currentExercisesInWorkout.size(); i++) {
-                    // Serialize data using semicolons
-                    currExerciseForLoop = currentExercisesInWorkout.get(i);
-                    String exerciseStringToAdd = currExerciseForLoop.getExerciseName() + ";"
-                            + currExerciseForLoop.getCalories() + ";"
-                            + currExerciseForLoop.getReps() + ";"
-                            + currExerciseForLoop.getMuscleGroupWorked() + ";";
+                // Make sure there are workouts in the list
+                if (currentExercisesInWorkout.size() > 0) {
+                    for (int i = 0; i < currentExercisesInWorkout.size(); i++) {
+                        // Serialize data using semicolons
+                        currExerciseForLoop = currentExercisesInWorkout.get(i);
+                        String exerciseStringToAdd = currExerciseForLoop.getExerciseName() + ";"
+                                + currExerciseForLoop.getCalories() + ";"
+                                + currExerciseForLoop.getReps() + ";"
+                                + currExerciseForLoop.getMuscleGroupWorked() + ";";
 
-                    sb.append(exerciseStringToAdd);
+                        sb.append(exerciseStringToAdd);
+                    }
+                }
+                else {
+                    Toast.makeText(WorkoutList.this,"Please add at least one exercise.", Toast.LENGTH_LONG).show();
+                    return;
                 }
                 // TODO: combine exercise data array into one string for adding into Workout DB
                 String finalStringToAdd = sb.toString();
+                Log.d(TAG, "finalStringToAdd == " + finalStringToAdd);
                 currentWorkout.setExercises(finalStringToAdd);
 
                 // TODO: save workout to SQLite first

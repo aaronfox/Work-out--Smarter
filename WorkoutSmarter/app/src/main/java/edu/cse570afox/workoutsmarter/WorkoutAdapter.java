@@ -57,16 +57,18 @@ public class WorkoutAdapter extends RecyclerView.Adapter {
         Log.d(TAG, "!!! " + workoutData.get(position).getExercises());
         String[] exercisesInfoStringArray = workoutData.get(position).getExercises().split(";");
         ArrayList<Exercise>  exercisesInfo = new ArrayList<Exercise>();// workoutData.get(position).getExercises().split(";");
-        for (int i = 0; i < exercisesInfoStringArray.length; i += 4) {
-            Exercise newExercise = new Exercise();
-            // TODO add exercise ID to list
+        if (exercisesInfoStringArray.length > 4) {
+            for (int i = 0; i < exercisesInfoStringArray.length; i += 4) {
+                Exercise newExercise = new Exercise();
+                // TODO add exercise ID to list
 //            newExercise.setExerciseID(Integer.parseInt(exercisesInfoStringArray[i]));
-            newExercise.setExerciseName(exercisesInfoStringArray[i]);
-            newExercise.setCalories(Integer.parseInt(exercisesInfoStringArray[i + 1]));
-            newExercise.setReps(Integer.parseInt(exercisesInfoStringArray[i + 2]));
-            newExercise.setMuscleGroupWorked(exercisesInfoStringArray[i + 3]);
+                newExercise.setExerciseName(exercisesInfoStringArray[i]);
+                newExercise.setCalories(Integer.parseInt(exercisesInfoStringArray[i + 1]));
+                newExercise.setReps(Integer.parseInt(exercisesInfoStringArray[i + 2]));
+                newExercise.setMuscleGroupWorked(exercisesInfoStringArray[i + 3]);
 
-            exercisesInfo.add(newExercise);
+                exercisesInfo.add(newExercise);
+            }
         }
 //       ArrayList<String> exerciseNames = new String[];
         for (int i = 0; i < exercisesInfo.size(); i++) {
