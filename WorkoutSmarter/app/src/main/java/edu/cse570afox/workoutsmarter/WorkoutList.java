@@ -146,7 +146,7 @@ public class WorkoutList extends AppCompatActivity {
                 final EditText editTextWorkoutName = (EditText) findViewById(R.id.editTextWorkoutName);
                 // Make sure User has workout name filled out
                 if (editTextWorkoutName.getText().toString().isEmpty()) {
-                    Toast.makeText(WorkoutList.this,"Please Enter Entire Workout Name", Toast.LENGTH_LONG).show();
+                    Toast.makeText(WorkoutList.this,"Please enter entire workout name", Toast.LENGTH_LONG).show();
                     return;
                 }
                 currentWorkout.setWorkoutName(editTextWorkoutName.getText().toString());

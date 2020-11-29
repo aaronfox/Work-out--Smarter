@@ -11,6 +11,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 public class AddExercise extends AppCompatActivity {
 
@@ -43,19 +44,46 @@ public class AddExercise extends AppCompatActivity {
                 // Save Exercise data to exercise DB before going back to Workout List
                 // Exercise Name
                 final EditText etExerciseName = (EditText) findViewById(R.id.exerciseNameEditText);
+                // Make sure exercise name is filled out
+                if (etExerciseName.getText().toString().isEmpty()) {
+                    Toast.makeText(AddExercise.this,"Please enter entire exercise name", Toast.LENGTH_LONG).show();
+                    return;
+                }
                 currentExercise.setExerciseName(etExerciseName.getText().toString());
 
                 // Calories Burned
                 final EditText etCaloriesBurned = (EditText) findViewById(R.id.caloriesBurnedEditText);
+                // Make sure calories is valid number
+                if (etCaloriesBurned.getText().toString().isEmpty() == false) {
+                    if (Integer.parseInt(etCaloriesBurned.getText().toString()) <= 0) {
+                        Toast.makeText(AddExercise.this, "Please enter entire a valid calorie count", Toast.LENGTH_LONG).show();
+                        return;
+                    }
+                }
+                else {
+                    Toast.makeText(AddExercise.this, "Please enter entire a valid calorie count", Toast.LENGTH_LONG).show();
+                    return;
+                }
                 currentExercise.setCalories(Integer.parseInt(etCaloriesBurned.getText().toString()));
 
-                // TODO: get spinner info for Muscle Group too
+                // Get spinner info for Muscle Group too
                 // Muscle Group
                 final Spinner spMuscleGroup = (Spinner) findViewById(R.id.muscleGroupSpinner);
                 currentExercise.setMuscleGroupWorked(spMuscleGroup.getSelectedItem().toString());
 
-                // Calories Burned
+                // Number of Reps
                 final EditText etReps = (EditText) findViewById(R.id.repsEditText);
+                // Make sure reps is valid number
+                if (etReps.getText().toString().isEmpty() == false) {
+                    if (Integer.parseInt(etReps.getText().toString()) <= 0) {
+                        Toast.makeText(AddExercise.this, "Please enter entire a valid rep count", Toast.LENGTH_LONG).show();
+                        return;
+                    }
+                }
+                else {
+                    Toast.makeText(AddExercise.this, "Please enter entire a valid rep count", Toast.LENGTH_LONG).show();
+                    return;
+                }
                 currentExercise.setReps(Integer.parseInt(etReps.getText().toString()));
 
                 // TODO: see if need to implement hideKeyboard method
