@@ -20,6 +20,7 @@ public class MainActivity extends AppCompatActivity {
 
     private static final String TAG = "MainWorkoutActivity";
     ArrayList<Workout> workouts;
+    WorkoutAdapter workoutAdapter;
 
     private View.OnClickListener onItemClickListener = new View.OnClickListener() {
         @Override
@@ -50,7 +51,7 @@ public class MainActivity extends AppCompatActivity {
             RecyclerView workoutList = findViewById(R.id.workoutListRecyclerView);
             RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
             workoutList.setLayoutManager(layoutManager);
-            WorkoutAdapter workoutAdapter = new WorkoutAdapter(workouts);
+            workoutAdapter = new WorkoutAdapter(workouts, this);
             workoutAdapter.setOnItemClickListener(onItemClickListener);
             workoutList.setAdapter(workoutAdapter);
         }
@@ -71,7 +72,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                 boolean status = compoundButton.isChecked();
-                WorkoutAdapter workoutAdapter = new WorkoutAdapter(workouts);
+//                WorkoutAdapter workoutAdapter = new WorkoutAdapter(workouts, MainActivity.this);
                 workoutAdapter.setDelete(status);
                 workoutAdapter.notifyDataSetChanged();
             }

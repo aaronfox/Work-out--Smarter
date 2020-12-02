@@ -124,6 +124,13 @@ public class WorkoutDataSource {
     }
 
     public boolean deleteWorkout(int workoutID) {
-        boolean isDelete
+        boolean didDelete = false;
+        try {
+            didDelete = database.delete("workout", "_id=" + workoutID, null) > 0;
+        }
+        catch (Exception e) {
+
+        }
+        return didDelete;
     }
 }
