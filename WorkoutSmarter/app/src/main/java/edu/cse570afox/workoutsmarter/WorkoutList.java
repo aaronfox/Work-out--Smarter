@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -13,10 +14,12 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.CursorAdapter;
 import android.widget.EditText;
 import android.widget.SimpleCursorAdapter;
 import android.widget.Spinner;
+import android.widget.Switch;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -27,13 +30,19 @@ public class WorkoutList extends AppCompatActivity {
     private ArrayList<Exercise> exercises;
     private ArrayList<Exercise> currentExercisesInWorkout = new ArrayList<Exercise>();
     private Workout currentWorkout = new Workout();
+    private ExerciseAdapter exerciseAdapter;
+    private boolean isDeletingStatus;
 
+//    public WorkoutList(Context context)
     private View.OnClickListener onItemClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
+            // On Clicking exercise, send extras to AddExercise activity to edit it
             RecyclerView.ViewHolder viewHolder = (RecyclerView.ViewHolder) view.getTag();
             int position = viewHolder.getAdapterPosition();
-            Intent intent = new Intent(WorkoutList.this, MainActivity.class);
+            int exerciseID = currentExercisesInWorkout.get(position).getExerciseID();
+            Intent intent = new Intent(WorkoutList.this, AddExercise.class);
+            intent.putExtra("exerciseID", exerciseID);
             startActivity(intent);
         }
     };
@@ -55,6 +64,7 @@ public class WorkoutList extends AppCompatActivity {
         initAddNewExerciseButton();
         initSaveWorkoutButton();
         initAddExerciseToWorkoutListButton();
+        initDeleteSwitch();
 
         // Add items to RecyclerView
 //        ExerciseDataSource ds = new ExerciseDataSource(this);
@@ -73,6 +83,7 @@ public class WorkoutList extends AppCompatActivity {
 //            Toast.makeText(this, "Error retrieving exercises", Toast.LENGTH_LONG).show();
 //        }
 
+        updateRecyclerView();
         // Spinner element
         // Reference: https://developer.android.com/guide/topics/ui/controls/spinner#java
         Spinner workoutGroupToAddSpinner = (Spinner) findViewById(R.id.workoutGroupToAddSpinner);
@@ -217,6 +228,22 @@ public class WorkoutList extends AppCompatActivity {
         });
     }
 
+    // Need to have context of WorkoutList when calling this. Otherwise there will be different arraylists of currentExercisesInWorkout
+    public void removeExerciseFromCurrentExercisesInWorkout(int id) {
+        boolean didDelete = false;
+        for (int i = 0; i < currentExercisesInWorkout.size(); i++) {
+            if (didDelete == false) {
+                if (currentExercisesInWorkout.get(i).getExerciseID() == id) {
+                    currentExercisesInWorkout.remove(i);
+                    didDelete = true;
+                    updateRecyclerView();
+                    // TODO: make sure DELETE button still there after a delete
+                    exerciseAdapter.setDelete(true);
+                    isDeletingStatus = true;
+                }
+            }
+        }
+    }
 
 
     private void initAddExerciseToWorkoutListButton() {
@@ -258,12 +285,28 @@ public class WorkoutList extends AppCompatActivity {
                         exerciseToAdd.setReps(repsInt);
                         exerciseToAdd.setMuscleGroupWorked(muscleGroupString);
                         currentExercisesInWorkout.add(exerciseToAdd);
+
                         // Add the above data to Recycler View
                         updateRecyclerView();
                     } while(cursor.moveToNext());
                 }
+                if (isDeletingStatus) {
+                    exerciseAdapter.setDelete(isDeletingStatus);
+                }
 //                cursor.close();
-//                Log.d(TAG,"hellllo: " + cursor.getString(0));//cursor.getString(2) + " " + cursor.getString(4));
+            }
+        });
+    }
+
+    private void initDeleteSwitch() {
+        Switch s = findViewById(R.id.deleteExerciseSwitch);
+        s.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                boolean status = compoundButton.isChecked();
+                isDeletingStatus = status;
+                exerciseAdapter.setDelete(status);
+                exerciseAdapter.notifyDataSetChanged();
             }
         });
     }
@@ -272,7 +315,7 @@ public class WorkoutList extends AppCompatActivity {
         RecyclerView exerciseList = findViewById(R.id.rvCurrentWorkoutPlan);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
         exerciseList.setLayoutManager(layoutManager);
-        ExerciseAdapter exerciseAdapter = new ExerciseAdapter(currentExercisesInWorkout);
+        exerciseAdapter = new ExerciseAdapter(currentExercisesInWorkout, this);
         exerciseAdapter.setOnItemClickListener(onItemClickListener);
         exerciseList.setAdapter(exerciseAdapter);
     }

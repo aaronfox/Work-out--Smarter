@@ -111,4 +111,33 @@ public class ExerciseDataSource {
         return exercises;
 //        return exerciseNames;
     }
+
+    public Exercise getSpecificExercise(int exerciseID) {
+        Exercise exercise = new Exercise();
+        String query = "SELECT * FROM exercise WHERE _id =" + exerciseID;
+        Cursor cursor = database.rawQuery(query, null);
+
+        if (cursor.moveToFirst()) {
+            exercise.setExerciseID(cursor.getInt(0));
+            exercise.setExerciseName(cursor.getString(1));
+            exercise.setCalories(cursor.getInt(2));
+            exercise.setReps(cursor.getInt(3));
+            exercise.setMuscleGroupWorked(cursor.getString(4));
+
+            cursor.close();
+        }
+
+        return exercise;
+    }
+
+    public boolean deleteExercise(int exerciseID) {
+        boolean didDelete = false;
+        try {
+            didDelete = database.delete("exercise", "_id=" + exerciseID, null) > 0;
+        }
+        catch (Exception e) {
+
+        }
+        return didDelete;
+    }
 }

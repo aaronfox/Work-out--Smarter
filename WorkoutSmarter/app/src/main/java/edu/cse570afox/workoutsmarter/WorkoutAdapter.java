@@ -50,9 +50,6 @@ public class WorkoutAdapter extends RecyclerView.Adapter {
             return deleteButton;
         }
 
-//        public Switch getTvNumExercises() {
-//            return tvNumExercises;
-//        }
     }
 
     public WorkoutAdapter(ArrayList<Workout> arrayList, Context context) {

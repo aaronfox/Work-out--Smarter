@@ -17,7 +17,8 @@ public class AddExercise extends AppCompatActivity {
 
     private static final String TAG = "AddExercise";
     private Exercise currentExercise = new Exercise();
-
+    private  ArrayAdapter<CharSequence> adapter;
+    private int sentExerciseID = -1;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -27,7 +28,7 @@ public class AddExercise extends AppCompatActivity {
         Spinner spMuscleGroup = (Spinner) findViewById(R.id.muscleGroupSpinner);
 
         // Create an ArrayAdapter using the string array and a default spinner layout
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
+        adapter = ArrayAdapter.createFromResource(this,
                 R.array.muscle_group_array, android.R.layout.simple_spinner_item);
         // Specify the layout to use when the list of choices appears
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -35,6 +36,76 @@ public class AddExercise extends AppCompatActivity {
         spMuscleGroup.setAdapter(adapter);
 
         initSaveNewExerciseButton();
+        initDeleteExerciseButton();
+
+        Bundle extras = getIntent().getExtras();
+        if (extras != null) {
+            initExercise(extras.getInt("exerciseID"));
+        }
+        else {
+            currentExercise = new Exercise();
+        }
+    }
+
+    private void initDeleteExerciseButton() {
+        Button bDeleteExercise = findViewById(R.id.deleteExerciseButton);
+        bDeleteExercise.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View view) {
+                // TODO: Get exercise ID and then delete item from there
+                // TODO: first need to have extras from WorkoutList fill in info.
+                // Then, when info is filled out, only then can an exercise be deleted. Otherwise, there is no exercise to delete.
+                if (sentExerciseID > -1) {
+                    ExerciseDataSource ds = new ExerciseDataSource(AddExercise.this);
+                    try {
+                        ds.open();
+                        ds.deleteExercise(sentExerciseID);
+                        ds.close();
+                        // Go back to WorkoutList Activity
+                        Intent intent = new Intent(AddExercise.this, WorkoutList.class);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        startActivity(intent);
+                    } catch (Exception e) {
+                        Toast.makeText(AddExercise.this, "Load Exercise Failed.", Toast.LENGTH_LONG).show();
+                    }
+                }
+                else {
+                    Toast.makeText(AddExercise.this, "No Exercise to Delete.", Toast.LENGTH_LONG).show();
+                }
+            }
+
+        });
+
+    }
+
+    private void initExercise(int id) {
+        ExerciseDataSource ds = new ExerciseDataSource(AddExercise.this);
+        sentExerciseID = id;
+        try {
+            ds.open();
+            currentExercise = ds.getSpecificExercise(id);
+            ds.close();
+        }
+        catch (Exception e) {
+            Toast.makeText(this, "Load Exercise Failed.", Toast.LENGTH_LONG).show();
+        }
+
+        // Fill in info for exercise
+        EditText editName = findViewById(R.id.exerciseNameEditText);
+        EditText caloriesBurnedEditText = findViewById(R.id.caloriesBurnedEditText);
+
+        Spinner muscleGroupSpinner = findViewById(R.id.muscleGroupSpinner);
+
+        EditText repsEditText = findViewById(R.id.repsEditText);
+
+        editName.setText(currentExercise.getExerciseName());
+        caloriesBurnedEditText.setText("" +currentExercise.getCalories());
+        repsEditText.setText("" + currentExercise.getReps());
+        // Set spinner position
+        if (currentExercise.getMuscleGroupWorked() != null) {
+            int spinnerPosition = adapter.getPosition(currentExercise.getMuscleGroupWorked());
+            muscleGroupSpinner.setSelection(spinnerPosition);
+        }
+
     }
 
     private void initSaveNewExerciseButton() {
