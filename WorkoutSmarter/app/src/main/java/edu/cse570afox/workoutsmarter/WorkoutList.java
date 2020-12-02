@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -43,6 +44,7 @@ public class WorkoutList extends AppCompatActivity {
             int exerciseID = currentExercisesInWorkout.get(position).getExerciseID();
             Intent intent = new Intent(WorkoutList.this, AddExercise.class);
             intent.putExtra("exerciseID", exerciseID);
+            intent.putParcelableArrayListExtra("exercise_array_list", currentExercisesInWorkout);
             startActivity(intent);
         }
     };
@@ -53,7 +55,7 @@ public class WorkoutList extends AppCompatActivity {
         setContentView(R.layout.activity_workout_list);
 
         Bundle extras = getIntent().getExtras();
-        if (extras != null) {
+        if (getIntent().hasExtra("workoutID")) {
             Log.v(TAG, "!!!EXTRAS");
             initWorkout(extras.getInt("workoutID"));
         } else {
@@ -65,6 +67,16 @@ public class WorkoutList extends AppCompatActivity {
         initSaveWorkoutButton();
         initAddExerciseToWorkoutListButton();
         initDeleteSwitch();
+
+        // See if need to add data from adding custom exercise
+        if (getIntent().hasExtra("exercise_array_list")) {
+            Log.v(TAG, "!!! received list");
+            currentExercisesInWorkout = getIntent().getParcelableArrayListExtra("exercise_array_list");
+            for (int i = 0; i < currentExercisesInWorkout.size(); i++) {
+                Log.v(TAG, "!!! list name == " + currentExercisesInWorkout.get(i).getExerciseName());
+
+            }
+        }
 
         // Add items to RecyclerView
 //        ExerciseDataSource ds = new ExerciseDataSource(this);
@@ -151,6 +163,8 @@ public class WorkoutList extends AppCompatActivity {
             public void onClick(View view) {
                 Intent intent = new Intent(WorkoutList.this, AddExercise.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                // If existing exercises, send exercises
+                intent.putParcelableArrayListExtra("exercise_array_list", currentExercisesInWorkout);
                 startActivity(intent);
             }
         });
@@ -223,6 +237,7 @@ public class WorkoutList extends AppCompatActivity {
 
                 Intent intent = new Intent(WorkoutList.this, MainActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                intent.putParcelableArrayListExtra("exercise_array_list", currentExercisesInWorkout);
                 startActivity(intent);
             }
         });

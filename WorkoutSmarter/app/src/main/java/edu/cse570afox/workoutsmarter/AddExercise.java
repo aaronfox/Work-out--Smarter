@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -13,12 +14,15 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import java.util.ArrayList;
+
 public class AddExercise extends AppCompatActivity {
 
     private static final String TAG = "AddExercise";
     private Exercise currentExercise = new Exercise();
     private  ArrayAdapter<CharSequence> adapter;
     private int sentExerciseID = -1;
+    private ArrayList<Exercise> sentExercises = new ArrayList<>();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -38,8 +42,15 @@ public class AddExercise extends AppCompatActivity {
         initSaveNewExerciseButton();
         initDeleteExerciseButton();
 
+
         Bundle extras = getIntent().getExtras();
-        if (extras != null) {
+
+        if (getIntent().hasExtra("exercise_array_list")) {
+            sentExercises = getIntent().getParcelableArrayListExtra("exercise_array_list");
+            Log.v(TAG, "!!! received exercises sentExercises.size() == " + sentExercises.size() );
+        }
+
+        if (getIntent().hasExtra("exerciseID")) {
             initExercise(extras.getInt("exerciseID"));
         }
         else {
@@ -63,6 +74,18 @@ public class AddExercise extends AppCompatActivity {
                         // Go back to WorkoutList Activity
                         Intent intent = new Intent(AddExercise.this, WorkoutList.class);
                         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        // send data back if needed
+
+                        if (sentExercises.size() > 0) {
+                            // Remove exercise from sent exercise first
+                            for (int i = 0; i < sentExercises.size(); i++) {
+                                if (sentExercises.get(i).getExerciseID() == sentExerciseID) {
+                                    sentExercises.remove(i);
+                                }
+                            }
+                            intent.putParcelableArrayListExtra("exercise_array_list", sentExercises);
+                        }
+                        Log.v(TAG, "!!! before sending from delete button sentExercises.size() == " + sentExercises.size() );
                         startActivity(intent);
                     } catch (Exception e) {
                         Toast.makeText(AddExercise.this, "Load Exercise Failed.", Toast.LENGTH_LONG).show();
@@ -189,6 +212,21 @@ public class AddExercise extends AppCompatActivity {
 
                 Intent intent = new Intent(AddExercise.this, WorkoutList.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                if (sentExercises.size() > 0) {
+                    // If user changed content of this exercise, change it in sentExercises so it's fixed in the RV of WorkoutList
+                    for (int i = 0; i < sentExercises.size(); i++) {
+                        if (sentExercises.get(i).getExerciseID() == sentExerciseID) {
+                            // Change all data to reflect changes user made
+                            sentExercises.get(i).setExerciseName(etExerciseName.getText().toString());
+                            sentExercises.get(i).setCalories(Integer.parseInt(etCaloriesBurned.getText().toString()));
+                            sentExercises.get(i).setMuscleGroupWorked(spMuscleGroup.getSelectedItem().toString());
+                            sentExercises.get(i).setReps(Integer.parseInt(etReps.getText().toString()));
+                        }
+                    }
+                    intent.putParcelableArrayListExtra("exercise_array_list", sentExercises);
+                }
+                Log.v(TAG, "!!! before sending from save button sentExercises.size() == " + sentExercises.size() );
+
                 startActivity(intent);
             }
         });

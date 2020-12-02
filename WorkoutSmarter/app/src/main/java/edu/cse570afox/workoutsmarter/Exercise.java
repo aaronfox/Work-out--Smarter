@@ -1,6 +1,9 @@
 package edu.cse570afox.workoutsmarter;
 
-public class Exercise {
+import android.os.Parcel;
+import android.os.Parcelable;
+
+public class Exercise implements Parcelable {
 
     private int exerciseID;
     private String exerciseName;
@@ -10,6 +13,15 @@ public class Exercise {
 
     public Exercise() {
         exerciseID = -1;
+    }
+
+    protected Exercise(Parcel in) {
+        exerciseID = in.readInt();
+        exerciseName = in.readString();
+        calories = in.readInt();
+        reps = in.readInt();
+        muscleGroupWorked = in.readString();
+
     }
 
     public int getCalories() {
@@ -53,4 +65,30 @@ public class Exercise {
     }
 
 
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeInt(exerciseID);
+        parcel.writeString(exerciseName);
+        parcel.writeInt(calories);
+        parcel.writeInt(reps);
+        parcel.writeString(muscleGroupWorked);
+    }
+
+    @SuppressWarnings("unused")
+    public static final Parcelable.Creator<Exercise> CREATOR = new Parcelable.Creator<Exercise>() {
+        @Override
+        public Exercise createFromParcel(Parcel in) {
+            return new Exercise(in);
+        }
+
+        @Override
+        public Exercise[] newArray(int size) {
+            return new Exercise[size];
+        }
+    };
 }

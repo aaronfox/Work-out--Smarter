@@ -80,7 +80,7 @@ public class ExerciseAdapter extends RecyclerView.Adapter {
 //        evh.getTvMuscleGroup().setText(exerciseData.get(position).getMuscleGroupWorked());
 
         evh.getExerciseNameTextView().setText(exerciseData.get(position).getExerciseName());
-        evh.getMuscleGroupTextView().setText(exerciseData.get(position).getMuscleGroupWorked());
+        evh.getMuscleGroupTextView().setText("(" + exerciseData.get(position).getMuscleGroupWorked() +")");
         evh.getCaloriesTextView().setText("Calories: " + exerciseData.get(position).getCalories());
         evh.getRepsTextView().setText("Reps: " + exerciseData.get(position).getReps());
 
