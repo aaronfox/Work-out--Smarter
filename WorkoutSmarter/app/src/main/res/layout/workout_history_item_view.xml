@@ -37,4 +37,16 @@
         app:layout_constraintBottom_toBottomOf="@+id/workoutHistoryItemCaloriesBurnedTextView"
         app:layout_constraintStart_toEndOf="@+id/workoutHistoryItemCaloriesBurnedTextView"
         app:layout_constraintTop_toTopOf="@+id/workoutHistoryItemNameTextView" />
+
+    <Button
+        android:id="@+id/workoutHistoryItemDeleteButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:background="@color/system_transparent"
+        android:text="Delete"
+        android:textColor="@color/system_red"
+        android:visibility="invisible"
+        app:layout_constraintEnd_toEndOf="parent"
+        tools:layout_editor_absoluteY="22dp" />
 </androidx.constraintlayout.widget.ConstraintLayout>

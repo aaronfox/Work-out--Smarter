@@ -272,7 +272,7 @@ public class WorkoutList extends AppCompatActivity {
                     currentExercisesInWorkout.remove(i);
                     didDelete = true;
                     updateRecyclerView();
-                    // TODO: make sure DELETE button still there after a delete
+                    // Make sure DELETE button still there after a delete
                     exerciseAdapter.setDelete(true);
                     isDeletingStatus = true;
                 }

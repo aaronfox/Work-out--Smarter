@@ -104,4 +104,15 @@ public class PastWorkoutDataSource {
         }
         return pastWorkouts;
     }
+
+    public boolean deletePastWorkout(int pastWorkoutID) {
+        boolean didDelete = false;
+        try {
+            didDelete = database.delete("pastworkout", "_id=" + pastWorkoutID, null) > 0;
+        }
+        catch (Exception e) {
+
+        }
+        return didDelete;
+    }
 }

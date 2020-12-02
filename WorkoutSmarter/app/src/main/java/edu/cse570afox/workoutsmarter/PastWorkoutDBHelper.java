@@ -7,7 +7,7 @@ import android.util.Log;
 
 public class PastWorkoutDBHelper extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "pastworkouts.db";
-    private static final int DATABASE_VERSION = 3;
+    private static final int DATABASE_VERSION = 4;
 
     private static final String CREATE_TABLE_PASTWORKOUT =
             "create table pastworkout (_id integer primary key autoincrement, "

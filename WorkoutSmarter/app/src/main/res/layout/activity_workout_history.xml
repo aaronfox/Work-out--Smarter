@@ -86,4 +86,14 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/recordWorkoutButton" />
 
+    <Switch
+        android:id="@+id/workoutHistorySwitch"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:text="Switch"
+        app:layout_constraintBottom_toBottomOf="@+id/recordWorkoutButton"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/recordWorkoutButton" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

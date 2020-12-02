@@ -11,10 +11,12 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.DatePicker;
 import android.widget.ImageButton;
 import android.widget.SimpleCursorAdapter;
 import android.widget.Spinner;
+import android.widget.Switch;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -25,6 +27,9 @@ public class WorkoutHistory extends AppCompatActivity {
     private static final String TAG = "WorkoutHistory";
     private PastWorkout currentPastWorkout = new PastWorkout();
     private DatePicker datePicker;
+    private PastWorkoutAdapter pastWorkoutAdapter;
+    ArrayList<PastWorkout> pastWorkouts;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,11 +40,16 @@ public class WorkoutHistory extends AppCompatActivity {
         initMainButton();
         initMapButton();
         changeWorkoutSpinner();
+        initDeleteSwitch();
         datePicker = (DatePicker) findViewById(R.id.datePicker1);
         initRecordWorkoutButton();
 
+        updateRecyclerView();
+
+    }
+
+    private void updateRecyclerView() {
         PastWorkoutDataSource ds = new PastWorkoutDataSource(this);
-        ArrayList<PastWorkout> pastWorkouts;
         try {
             ds.open();
             pastWorkouts = ds.getPastworkouts("a", "b");
@@ -47,13 +57,26 @@ public class WorkoutHistory extends AppCompatActivity {
             RecyclerView pastWorkoutRV = findViewById(R.id.workoutHistoryRV);
             RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
             pastWorkoutRV.setLayoutManager(layoutManager);
-            PastWorkoutAdapter pastWorkoutAdapater = new PastWorkoutAdapter(pastWorkouts);
-            pastWorkoutRV.setAdapter(pastWorkoutAdapater);
+            pastWorkoutAdapter = new PastWorkoutAdapter(pastWorkouts, this);
+            pastWorkoutRV.setAdapter(pastWorkoutAdapter);
         }
         catch (Exception e) {
             Toast.makeText(this, "Error retrieving past workouts.", Toast.LENGTH_LONG).show();
         }
     }
+
+    private void initDeleteSwitch() {
+        Switch s = findViewById(R.id.workoutHistorySwitch);
+        s.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                boolean status = compoundButton.isChecked();
+                pastWorkoutAdapter.setDelete(status);
+                pastWorkoutAdapter.notifyDataSetChanged();
+            }
+        });
+    }
+
 
     private void initRecordWorkoutButton() {
         Button recordWorkoutButton = (Button) findViewById(R.id.recordWorkoutButton);
@@ -64,11 +87,40 @@ public class WorkoutHistory extends AppCompatActivity {
                 // Workout name
                 Spinner workoutSpinner = (Spinner) findViewById(R.id.workoutHistorySelectSpinner);
                 Cursor c = (Cursor) workoutSpinner.getSelectedItem();
-                currentPastWorkout.setWorkoutName(c.getString(1));
+                String currWorkoutName = c.getString(1);
+                currentPastWorkout.setWorkoutName(currWorkoutName);
 //                c.close();
                 currentPastWorkout.setDateOfWorkout(datePicker.getDayOfMonth() + "/" + datePicker.getMonth() + "/" + datePicker.getYear());
                 // TODO: Count up actual calories burned from workout
-                currentPastWorkout.setCaloriesBurned(90);
+                // First, get exercises from workout
+                WorkoutDataSource workoutDS = new WorkoutDataSource(WorkoutHistory.this);
+                // Find id of workout name
+                int calorieCount = 0;
+                try {
+                    String query = "SELECT  * FROM workout WHERE workoutname ='" + currWorkoutName +"'";
+                    SQLiteDatabase db = new WorkoutDBHelper(WorkoutHistory.this).getReadableDatabase();
+                    Cursor cursor = db.rawQuery(query, null);
+
+                    cursor.moveToFirst();
+                    while (!cursor.isAfterLast()) {
+                        String exercises = cursor.getString(2);
+                        String[] exercisesInfoStringArray = exercises.split(";");
+                        if (exercisesInfoStringArray.length > 5) {
+                            for (int i = 0; i < exercisesInfoStringArray.length; i += 5) {
+                                calorieCount += Integer.parseInt(exercisesInfoStringArray[i + 2]);
+                            }
+                        }
+//                        calorieCount += cursor.getInt()
+
+                        cursor.moveToNext();
+                    }
+                    cursor.close();
+                }
+                catch (Exception e) {
+                        Log.v(TAG, "!!! Could not add calories, e: " + e.toString());
+                }
+                // end find of id of workout name
+                currentPastWorkout.setCaloriesBurned(calorieCount);
 //                hideKeyboard();
                 boolean wasSuccessful = false;
                 // Need to add unique workout every time since someone could have multiple workouts in the same day
@@ -97,6 +149,8 @@ public class WorkoutHistory extends AppCompatActivity {
                 } else {
                     Log.v(TAG, "!!! Not SUCC FOR INSERT");
                 }
+
+                updateRecyclerView();
             }
         });
     }
