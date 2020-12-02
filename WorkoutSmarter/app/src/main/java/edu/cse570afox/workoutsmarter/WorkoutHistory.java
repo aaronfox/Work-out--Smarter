@@ -3,9 +3,13 @@ package edu.cse570afox.workoutsmarter;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageButton;
+import android.widget.SimpleCursorAdapter;
+import android.widget.Spinner;
 
 public class WorkoutHistory extends AppCompatActivity {
 
@@ -17,6 +21,7 @@ public class WorkoutHistory extends AppCompatActivity {
         // Init buttons
         initMainButton();
         initMapButton();
+        changeWorkoutSpinner();
     }
 
     private void initMapButton() {
@@ -28,6 +33,32 @@ public class WorkoutHistory extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+    }
+
+    private void changeWorkoutSpinner() {
+        Spinner changeWorkoutSpinner = (Spinner) findViewById(R.id.workoutHistorySelectSpinner);
+        String[] queryCols = new String[]{"_id", "workoutname"};
+        SQLiteDatabase db = new WorkoutDBHelper(this).getReadableDatabase();
+        String query = "SELECT workoutname FROM workout";
+        // Query explanation: https://stackoverflow.com/questions/10600670/sqlitedatabase-query-method
+        Cursor cursor = db.query(
+                "workout", // the table to query
+                queryCols,                              // the columns to return
+                null,       // the columns for the WHERE clause
+                null,                          // the values for the WHERE clause
+                null,                          // don't group the rows
+                null,                           // don't filter by row groups
+                "workoutname"                 // sort by exercise name
+        );
+
+        // Spinner example reference: https://en.proft.me/2016/10/20/spinner-example-android/
+
+        String[] adapterCols = new String[]{"workoutname"};
+        int[] adapterRowViews = new int[]{android.R.id.text1};
+        SimpleCursorAdapter cursorAdapter = new SimpleCursorAdapter(
+                this, android.R.layout.simple_spinner_item, cursor, adapterCols, adapterRowViews, 0);
+        cursorAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        changeWorkoutSpinner.setAdapter(cursorAdapter);
     }
 
     private void initMainButton() {

@@ -45,6 +45,12 @@ public class WorkoutList extends AppCompatActivity {
             Intent intent = new Intent(WorkoutList.this, AddExercise.class);
             intent.putExtra("exerciseID", exerciseID);
             intent.putParcelableArrayListExtra("exercise_array_list", currentExercisesInWorkout);
+            EditText workoutNameEditText = (EditText) findViewById(R.id.editTextWorkoutName);
+
+            String workoutName = workoutNameEditText.getText().toString();
+            if (workoutName.isEmpty() == false) {
+                intent.putExtra("workoutName", workoutName);
+            }
             startActivity(intent);
         }
     };
@@ -56,10 +62,8 @@ public class WorkoutList extends AppCompatActivity {
 
         Bundle extras = getIntent().getExtras();
         if (getIntent().hasExtra("workoutID")) {
-            Log.v(TAG, "!!!EXTRAS");
             initWorkout(extras.getInt("workoutID"));
         } else {
-            Log.v(TAG, "!!!EXTRAS NULL");
             currentWorkout = new Workout();
         }
         // Init buttons
@@ -70,12 +74,16 @@ public class WorkoutList extends AppCompatActivity {
 
         // See if need to add data from adding custom exercise
         if (getIntent().hasExtra("exercise_array_list")) {
-            Log.v(TAG, "!!! received list");
             currentExercisesInWorkout = getIntent().getParcelableArrayListExtra("exercise_array_list");
             for (int i = 0; i < currentExercisesInWorkout.size(); i++) {
                 Log.v(TAG, "!!! list name == " + currentExercisesInWorkout.get(i).getExerciseName());
 
             }
+        }
+
+        if (getIntent().hasExtra("workoutName")) {
+            EditText workoutNameEditText = (EditText) findViewById(R.id.editTextWorkoutName);
+            workoutNameEditText.setText(getIntent().getStringExtra("workoutName"));
         }
 
         // Add items to RecyclerView
@@ -165,6 +173,12 @@ public class WorkoutList extends AppCompatActivity {
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 // If existing exercises, send exercises
                 intent.putParcelableArrayListExtra("exercise_array_list", currentExercisesInWorkout);
+                EditText workoutNameEditText = (EditText) findViewById(R.id.editTextWorkoutName);
+
+                String workoutName = workoutNameEditText.getText().toString();
+                if (workoutName.isEmpty() == false) {
+                    intent.putExtra("workoutName", workoutName);
+                }
                 startActivity(intent);
             }
         });
@@ -238,6 +252,12 @@ public class WorkoutList extends AppCompatActivity {
                 Intent intent = new Intent(WorkoutList.this, MainActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 intent.putParcelableArrayListExtra("exercise_array_list", currentExercisesInWorkout);
+                EditText workoutNameEditText = (EditText) findViewById(R.id.editTextWorkoutName);
+
+                String workoutName = workoutNameEditText.getText().toString();
+                if (workoutName.isEmpty() == false) {
+                    intent.putExtra("workoutName", workoutName);
+                }
                 startActivity(intent);
             }
         });
@@ -341,13 +361,15 @@ public class WorkoutList extends AppCompatActivity {
             ds.open();
             currentWorkout = ds.getSpecificWorkout(id);
             ds.close();
+            Log.w(TAG, "!!!got current workout. name == " + currentWorkout.getWorkoutName());
+            updateRecyclerView();
         }
         catch (Exception e) {
             Toast.makeText(this, "Loading of workout failed.", Toast.LENGTH_LONG).show();
         }
 
         // Update workout to reflect current workout
-        Log.v(TAG, "updating recycler view!");
+        Log.v(TAG, "!!!updating recycler view!");
         // TODO: Get every exercise that is in workout then add it to RecyclerView
         // ALSO TODO: correctly edit exercise info when a user clicks on the workout in the MainActivity.
         // Need to get exercise id from exercises list first

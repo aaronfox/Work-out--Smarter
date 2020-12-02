@@ -6,6 +6,84 @@
     android:layout_height="match_parent"
     tools:context=".WorkoutHistory">
 
-    <include layout="@layout/nav_bar"></include>
+    <include
+        android:id="@+id/include"
+        layout="@layout/nav_bar"
+        tools:layout_editor_absoluteX="21dp"
+        tools:layout_editor_absoluteY="610dp"></include>
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="Workout History"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/recordWorkoutButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="Record Workout"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/datePicker1" />
+
+    <TextView
+        android:id="@+id/workoutHistoryWorkoutTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:text="Workout:"
+        app:layout_constraintBottom_toBottomOf="@+id/workoutHistorySelectSpinner"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/workoutHistorySelectSpinner" />
+
+    <Spinner
+        android:id="@+id/workoutHistorySelectSpinner"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/workoutHistoryWorkoutTextView"
+        app:layout_constraintTop_toBottomOf="@+id/textView" />
+
+    <TextView
+        android:id="@+id/workoutHistoryDateTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:text="Date:"
+        app:layout_constraintBottom_toBottomOf="@+id/datePicker1"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/datePicker1" />
+
+    <DatePicker
+        android:id="@+id/datePicker1"
+        android:layout_width="267dp"
+        android:layout_height="123dp"
+        android:layout_marginTop="16dp"
+        android:calendarViewShown="false"
+        android:datePickerMode="spinner"
+        app:layout_constraintStart_toStartOf="@+id/workoutHistorySelectSpinner"
+        app:layout_constraintTop_toBottomOf="@+id/workoutHistorySelectSpinner" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/workoutHistoryRV"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="16dp"
+        app:layout_constraintBottom_toTopOf="@+id/include"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/recordWorkoutButton" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

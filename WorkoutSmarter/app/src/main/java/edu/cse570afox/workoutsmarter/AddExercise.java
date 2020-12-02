@@ -23,6 +23,8 @@ public class AddExercise extends AppCompatActivity {
     private  ArrayAdapter<CharSequence> adapter;
     private int sentExerciseID = -1;
     private ArrayList<Exercise> sentExercises = new ArrayList<>();
+    private String sentWorkoutName = "";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -47,9 +49,11 @@ public class AddExercise extends AppCompatActivity {
 
         if (getIntent().hasExtra("exercise_array_list")) {
             sentExercises = getIntent().getParcelableArrayListExtra("exercise_array_list");
-            Log.v(TAG, "!!! received exercises sentExercises.size() == " + sentExercises.size() );
         }
 
+        if (getIntent().hasExtra("workoutName")) {
+            sentWorkoutName = getIntent().getStringExtra("workoutName");
+        }
         if (getIntent().hasExtra("exerciseID")) {
             initExercise(extras.getInt("exerciseID"));
         }
@@ -85,7 +89,9 @@ public class AddExercise extends AppCompatActivity {
                             }
                             intent.putParcelableArrayListExtra("exercise_array_list", sentExercises);
                         }
-                        Log.v(TAG, "!!! before sending from delete button sentExercises.size() == " + sentExercises.size() );
+                        if (sentWorkoutName.isEmpty() == false) {
+                            intent.putExtra("workoutName", sentWorkoutName);
+                        }
                         startActivity(intent);
                     } catch (Exception e) {
                         Toast.makeText(AddExercise.this, "Load Exercise Failed.", Toast.LENGTH_LONG).show();
@@ -203,12 +209,6 @@ public class AddExercise extends AppCompatActivity {
                     wasSuccessful = false;
                 }
 
-                if (wasSuccessful) {
-                    Log.d(TAG, "Successfully inserted/updated Exercise");
-                }
-                else {
-                    Log.d(TAG, "Did not insert/update Exercise");
-                }
 
                 Intent intent = new Intent(AddExercise.this, WorkoutList.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -225,8 +225,9 @@ public class AddExercise extends AppCompatActivity {
                     }
                     intent.putParcelableArrayListExtra("exercise_array_list", sentExercises);
                 }
-                Log.v(TAG, "!!! before sending from save button sentExercises.size() == " + sentExercises.size() );
-
+                if (sentWorkoutName.isEmpty() == false) {
+                    intent.putExtra("workoutName", sentWorkoutName);
+                }
                 startActivity(intent);
             }
         });
