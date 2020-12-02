@@ -1,6 +1,8 @@
 package edu.cse570afox.workoutsmarter;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.database.Cursor;
@@ -13,7 +15,9 @@ import android.widget.DatePicker;
 import android.widget.ImageButton;
 import android.widget.SimpleCursorAdapter;
 import android.widget.Spinner;
+import android.widget.Toast;
 
+import java.util.ArrayList;
 import java.util.Date;
 
 public class WorkoutHistory extends AppCompatActivity {
@@ -33,6 +37,22 @@ public class WorkoutHistory extends AppCompatActivity {
         changeWorkoutSpinner();
         datePicker = (DatePicker) findViewById(R.id.datePicker1);
         initRecordWorkoutButton();
+
+        PastWorkoutDataSource ds = new PastWorkoutDataSource(this);
+        ArrayList<PastWorkout> pastWorkouts;
+        try {
+            ds.open();
+            pastWorkouts = ds.getPastworkouts("a", "b");
+            ds.close();
+            RecyclerView pastWorkoutRV = findViewById(R.id.workoutHistoryRV);
+            RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
+            pastWorkoutRV.setLayoutManager(layoutManager);
+            PastWorkoutAdapter pastWorkoutAdapater = new PastWorkoutAdapter(pastWorkouts);
+            pastWorkoutRV.setAdapter(pastWorkoutAdapater);
+        }
+        catch (Exception e) {
+            Toast.makeText(this, "Error retrieving past workouts.", Toast.LENGTH_LONG).show();
+        }
     }
 
     private void initRecordWorkoutButton() {

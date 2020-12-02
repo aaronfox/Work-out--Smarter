@@ -7,6 +7,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 public class PastWorkoutDataSource {
     private SQLiteDatabase database;
@@ -75,5 +76,32 @@ public class PastWorkoutDataSource {
             lastID = -1;
         }
         return lastID;
+    }
+
+    public ArrayList<PastWorkout> getPastworkouts(String sortField, String sortOrder) {
+        ArrayList<PastWorkout> pastWorkouts = new ArrayList<PastWorkout>();
+
+        try {
+            String query = "SELECT  * FROM pastworkout";
+            Cursor cursor = database.rawQuery(query, null);
+
+            PastWorkout newPastWorkout;
+            cursor.moveToFirst();
+            while (!cursor.isAfterLast()) {
+                newPastWorkout = new PastWorkout();
+                newPastWorkout.setPastWorkoutID(cursor.getInt(0));
+                newPastWorkout.setWorkoutName(cursor.getString(1));
+                newPastWorkout.setDateOfWorkout(cursor.getString(2));
+                newPastWorkout.setCaloriesBurned(cursor.getInt(3));
+
+                pastWorkouts.add(newPastWorkout);
+                cursor.moveToNext();
+            }
+            cursor.close();
+        }
+        catch (Exception e) {
+            pastWorkouts = new ArrayList<PastWorkout>();
+        }
+        return pastWorkouts;
     }
 }
