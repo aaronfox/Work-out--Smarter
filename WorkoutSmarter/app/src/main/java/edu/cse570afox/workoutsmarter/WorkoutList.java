@@ -43,6 +43,14 @@ public class WorkoutList extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_workout_list);
 
+        Bundle extras = getIntent().getExtras();
+        if (extras != null) {
+            Log.v(TAG, "!!!EXTRAS");
+            initWorkout(extras.getInt("workoutID"));
+        } else {
+            Log.v(TAG, "!!!EXTRAS NULL");
+            currentWorkout = new Workout();
+        }
         // Init buttons
         initAddNewExerciseButton();
         initSaveWorkoutButton();
@@ -159,7 +167,8 @@ public class WorkoutList extends AppCompatActivity {
                     for (int i = 0; i < currentExercisesInWorkout.size(); i++) {
                         // Serialize data using semicolons
                         currExerciseForLoop = currentExercisesInWorkout.get(i);
-                        String exerciseStringToAdd = currExerciseForLoop.getExerciseName() + ";"
+                        String exerciseStringToAdd = currExerciseForLoop.getExerciseID() + ";"
+                                + currExerciseForLoop.getExerciseName() + ";"
                                 + currExerciseForLoop.getCalories() + ";"
                                 + currExerciseForLoop.getReps() + ";"
                                 + currExerciseForLoop.getMuscleGroupWorked() + ";";
@@ -171,12 +180,12 @@ public class WorkoutList extends AppCompatActivity {
                     Toast.makeText(WorkoutList.this,"Please add at least one exercise.", Toast.LENGTH_LONG).show();
                     return;
                 }
-                // TODO: combine exercise data array into one string for adding into Workout DB
+                // Combine exercise data array into one string for adding into Workout DB
                 String finalStringToAdd = sb.toString();
                 Log.d(TAG, "finalStringToAdd == " + finalStringToAdd);
                 currentWorkout.setExercises(finalStringToAdd);
 
-                // TODO: save workout to SQLite first
+                // Save workout to SQLite first
                 boolean wasSuccessful = false;
                 WorkoutDataSource ds = new WorkoutDataSource(WorkoutList.this);
                 try {
@@ -201,7 +210,6 @@ public class WorkoutList extends AppCompatActivity {
                 }
 
 
-                // END TODO:
                 Intent intent = new Intent(WorkoutList.this, MainActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(intent);
@@ -216,13 +224,12 @@ public class WorkoutList extends AppCompatActivity {
         bAddExercise.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // TODO: add current exercise in exercise spinner
-                Log.d(TAG, "Clicked add button");
+                // Add current exercise in exercise spinner
                 Spinner addExerciseSpinner = (Spinner) findViewById(R.id.addExerciseSpinner);
                 Cursor stringCursor = (Cursor) addExerciseSpinner.getSelectedItem();
                 String exerciseNameToAdd = stringCursor.getString(stringCursor.getColumnIndex("exercisename"));
 //                stringCursor.close();
-                // TODO: Get actual exercise by exercise name
+                // Get actual exercise by exercise name
                 String[] queryCols = new String[]{"_id", "exercisename", "calories", "reps", "musclegroupworked"};
                 SQLiteDatabase db = new ExerciseDBHelper(WorkoutList.this).getReadableDatabase();
                 String[] exercise_name_to_add = new String[] {exerciseNameToAdd};
@@ -251,9 +258,8 @@ public class WorkoutList extends AppCompatActivity {
                         exerciseToAdd.setReps(repsInt);
                         exerciseToAdd.setMuscleGroupWorked(muscleGroupString);
                         currentExercisesInWorkout.add(exerciseToAdd);
+                        // Add the above data to Recycler View
                         updateRecyclerView();
-                        // TODO: Add the above data to Recycler View instead of just printing it
-                        Log.d(TAG," WOO " + exerciseNameString + " " + caloriesInt + " " + repsInt + " " + muscleGroupString);
                     } while(cursor.moveToNext());
                 }
 //                cursor.close();
@@ -269,5 +275,75 @@ public class WorkoutList extends AppCompatActivity {
         ExerciseAdapter exerciseAdapter = new ExerciseAdapter(currentExercisesInWorkout);
         exerciseAdapter.setOnItemClickListener(onItemClickListener);
         exerciseList.setAdapter(exerciseAdapter);
+    }
+
+    private void initWorkout(int id) {
+        WorkoutDataSource ds = new WorkoutDataSource(WorkoutList.this);
+        try {
+            ds.open();
+            currentWorkout = ds.getSpecificWorkout(id);
+            ds.close();
+        }
+        catch (Exception e) {
+            Toast.makeText(this, "Loading of workout failed.", Toast.LENGTH_LONG).show();
+        }
+
+        // Update workout to reflect current workout
+        Log.v(TAG, "updating recycler view!");
+        // TODO: Get every exercise that is in workout then add it to RecyclerView
+        // ALSO TODO: correctly edit exercise info when a user clicks on the workout in the MainActivity.
+        // Need to get exercise id from exercises list first
+        SQLiteDatabase db = new WorkoutDBHelper(WorkoutList.this).getReadableDatabase();
+        String query = "SELECT * FROM workout WHERE _id =" + id;
+        Cursor cursor = db.rawQuery(query, null);
+
+        String exercisesString;
+        String workoutName;
+        if (cursor.moveToFirst()){
+            do {
+                workoutName = cursor.getString(cursor.getColumnIndex("workoutname"));
+                exercisesString = cursor.getString(cursor.getColumnIndex("exercises"));
+//                int caloriesInt = cursor.getInt(cursor.getColumnIndex("calories"));
+//                int repsInt = cursor.getInt(cursor.getColumnIndex("reps"));
+//                String muscleGroupString =  cursor.getString(cursor.getColumnIndex("musclegroupworked"));
+//                Exercise exerciseToAdd = new Exercise();
+//                exerciseToAdd.setExerciseID(cursor.getInt(cursor.getColumnIndex("_id")));
+//                exerciseToAdd.setExerciseName(exerciseNameString);
+//                exerciseToAdd.setCalories(caloriesInt);
+//                exerciseToAdd.setReps(repsInt);
+//                exerciseToAdd.setMuscleGroupWorked(muscleGroupString);
+//                currentExercisesInWorkout.add(exerciseToAdd);
+                // Add the above data to Recycler View
+//                updateRecyclerView();
+            } while(cursor.moveToNext());
+        }
+        else {
+            Toast.makeText(this, "Could not fetch exercises.", Toast.LENGTH_LONG).show();
+            return;
+        }
+        cursor.close();
+        // Go through exercises in exercise string
+        String[] exercisesInfoStringArray = exercisesString.split(";");
+//        ArrayList<Exercise>  exercisesInfo = new ArrayList<Exercise>();// workoutData.get(position).getExercises().split(";");
+        if (exercisesInfoStringArray.length > 5) {
+            for (int i = 0; i < exercisesInfoStringArray.length; i += 5) {
+                Exercise newExercise = new Exercise();
+                // TODO add exercise ID to list
+//            newExercise.setExerciseID(Integer.parseInt(exercisesInfoStringArray[i]));
+                newExercise.setExerciseID(Integer.parseInt(exercisesInfoStringArray[i]));
+                newExercise.setExerciseName(exercisesInfoStringArray[i+1]);
+                newExercise.setCalories(Integer.parseInt(exercisesInfoStringArray[i + 2]));
+                newExercise.setReps(Integer.parseInt(exercisesInfoStringArray[i + 3]));
+                newExercise.setMuscleGroupWorked(exercisesInfoStringArray[i + 4]);
+
+                currentExercisesInWorkout.add(newExercise);
+            }
+        }
+        updateRecyclerView();
+        // Add name of workout to textfield
+        final EditText editTextWorkoutName = (EditText) findViewById(R.id.editTextWorkoutName);
+        editTextWorkoutName.setText(workoutName);
+
+
     }
 }

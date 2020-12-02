@@ -54,28 +54,23 @@ public class WorkoutAdapter extends RecyclerView.Adapter {
         wvh.getTvWorkoutName().setText(workoutData.get(position).getWorkoutName());
         // TODO: get number of exercises and place it here
         // Get number of exercises by querying string and seeing how many semicolons are there
-        Log.d(TAG, "!!! " + workoutData.get(position).getExercises());
         String[] exercisesInfoStringArray = workoutData.get(position).getExercises().split(";");
         ArrayList<Exercise>  exercisesInfo = new ArrayList<Exercise>();// workoutData.get(position).getExercises().split(";");
-        if (exercisesInfoStringArray.length > 4) {
-            for (int i = 0; i < exercisesInfoStringArray.length; i += 4) {
+        if (exercisesInfoStringArray.length > 5) {
+            for (int i = 0; i < exercisesInfoStringArray.length; i += 5) {
                 Exercise newExercise = new Exercise();
                 // TODO add exercise ID to list
 //            newExercise.setExerciseID(Integer.parseInt(exercisesInfoStringArray[i]));
-                newExercise.setExerciseName(exercisesInfoStringArray[i]);
-                newExercise.setCalories(Integer.parseInt(exercisesInfoStringArray[i + 1]));
-                newExercise.setReps(Integer.parseInt(exercisesInfoStringArray[i + 2]));
-                newExercise.setMuscleGroupWorked(exercisesInfoStringArray[i + 3]);
+                newExercise.setExerciseID(Integer.parseInt(exercisesInfoStringArray[i]));
+                newExercise.setExerciseName(exercisesInfoStringArray[i+1]);
+                newExercise.setCalories(Integer.parseInt(exercisesInfoStringArray[i + 2]));
+                newExercise.setReps(Integer.parseInt(exercisesInfoStringArray[i + 3]));
+                newExercise.setMuscleGroupWorked(exercisesInfoStringArray[i + 4]);
 
                 exercisesInfo.add(newExercise);
             }
         }
 //       ArrayList<String> exerciseNames = new String[];
-        for (int i = 0; i < exercisesInfo.size(); i++) {
-            if (i % 4 == 0 ) {
-                Log.v(TAG, "!!!name" + exercisesInfo.get(i).getExerciseName());
-            }
-        }
 //        int sizeOfExercises = (int)(exercisesInfoStringArray.length / 4)
         wvh.getTvNumExercises().setText("Number of Exercises: " + Integer.toString((exercisesInfoStringArray.length / 4)));//workoutData.get(position).get());
 
@@ -86,4 +81,9 @@ public class WorkoutAdapter extends RecyclerView.Adapter {
     public int getItemCount() {
         return workoutData.size();
     }
+
+//    private void deleteWorkout(int position) {
+//        Workout workout = workoutData.get(position);
+//        WorkoutDataSource ds = new WorkoutDataSource(parentContext);
+//    }
 }

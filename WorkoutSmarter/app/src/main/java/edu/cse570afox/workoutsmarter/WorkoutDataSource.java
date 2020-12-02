@@ -105,5 +105,25 @@ public class WorkoutDataSource {
         return workouts;
 //        return exerciseNames;
     }
+
+    public Workout getSpecificWorkout(int workoutID) {
+        Workout workout = new Workout();
+
+        String query = "SELECT  * FROM workout WHERE _id =" + workoutID;
+        Cursor cursor = database.rawQuery(query, null);
+
+        if (cursor.moveToFirst()) {
+            workout.setWorkoutID(cursor.getInt(0));
+            workout.setWorkoutName(cursor.getString(1));
+            workout.setExercises(cursor.getString(2));
+
+            cursor.close();
+        }
+
+        return workout;
+    }
+
+    public boolean deleteWorkout(int workoutID) {
+        boolean isDelete
+    }
 }
-//}

@@ -6,9 +6,12 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.ImageButton;
+import android.widget.Switch;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -16,13 +19,18 @@ import java.util.ArrayList;
 public class MainActivity extends AppCompatActivity {
 
     private static final String TAG = "MainWorkoutActivity";
+    ArrayList<Workout> workouts;
 
     private View.OnClickListener onItemClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
+            Log.v(TAG, "CLICKED");
             RecyclerView.ViewHolder viewHolder = (RecyclerView.ViewHolder) view.getTag();
             int position = viewHolder.getAdapterPosition();
-            Intent intent = new Intent(MainActivity.this, MainActivity.class);
+            int workoutID = workouts.get(position).getWorkoutID();
+            Intent intent = new Intent(MainActivity.this, WorkoutList.class);
+            intent.putExtra("workoutID", workoutID);
+            Log.v(TAG, "sending ID of " + workoutID);
             startActivity(intent);
         }
     };
@@ -34,7 +42,6 @@ public class MainActivity extends AppCompatActivity {
 
         // Set data for RecyclerView
         WorkoutDataSource ds = new WorkoutDataSource(this);
-        ArrayList<Workout> workouts;
 
         try {
             ds.open();
@@ -55,6 +62,20 @@ public class MainActivity extends AppCompatActivity {
         initHistoryButton();
         initMapButton();
         initAddNewWorkoutButton();
+        initDeleteSwitch();
+    }
+
+    private void initDeleteSwitch() {
+        Switch s = findViewById(R.id.deleteSwitch);
+        s.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                boolean status = compoundButton.isChecked();
+                WorkoutAdapter workoutAdapter = new WorkoutAdapter(workouts);
+                workoutAdapter.setDelete(status);
+                workoutAdapter.notifyDataSetChanged();
+            }
+        });
     }
 
     private void initHistoryButton() {
