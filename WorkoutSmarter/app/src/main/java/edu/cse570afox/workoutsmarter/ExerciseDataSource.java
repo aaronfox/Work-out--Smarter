@@ -79,7 +79,7 @@ public class ExerciseDataSource {
         return lastID;
     }
 
-    // TODO: implement means of displaying needed data to recyclerview when user adds an exercise to a workout
+    // implement means of displaying needed data to recyclerview when user adds an exercise to a workout
     public ArrayList<Exercise> getExercises(String sortField, String sortOrder) {
         ArrayList<Exercise> exercises = new ArrayList<Exercise>();
 //        ArrayList<String> exerciseNames = new ArrayList<String>();

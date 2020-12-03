@@ -75,7 +75,7 @@ public class WorkoutDataSource {
         return lastID;
     }
 
-    // TODO: implement means of displaying workouts in RecyclerView
+    // implement means of displaying workouts in RecyclerView
     public ArrayList<Workout> getWorkouts(String sortField, String sortOrder) {
         ArrayList<Workout> workouts = new ArrayList<Workout>();
 //        ArrayList<String> exerciseNames = new ArrayList<String>();

@@ -90,8 +90,8 @@ public class WorkoutHistory extends AppCompatActivity {
                 String currWorkoutName = c.getString(1);
                 currentPastWorkout.setWorkoutName(currWorkoutName);
 //                c.close();
-                currentPastWorkout.setDateOfWorkout(datePicker.getDayOfMonth() + "/" + datePicker.getMonth() + "/" + datePicker.getYear());
-                // TODO: Count up actual calories burned from workout
+                currentPastWorkout.setDateOfWorkout(datePicker.getMonth() + 1 + "/" + datePicker.getDayOfMonth() + "/" + datePicker.getYear());
+                // Count up actual calories burned from workout
                 // First, get exercises from workout
                 WorkoutDataSource workoutDS = new WorkoutDataSource(WorkoutHistory.this);
                 // Find id of workout name

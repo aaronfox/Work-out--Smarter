@@ -78,7 +78,7 @@ public class WorkoutAdapter extends RecyclerView.Adapter {
         if (exercisesInfoStringArray.length > 5) {
             for (int i = 0; i < exercisesInfoStringArray.length; i += 5) {
                 Exercise newExercise = new Exercise();
-                // TODO add exercise ID to list
+                // add exercise ID to list
 //            newExercise.setExerciseID(Integer.parseInt(exercisesInfoStringArray[i]));
                 newExercise.setExerciseID(Integer.parseInt(exercisesInfoStringArray[i]));
                 newExercise.setExerciseName(exercisesInfoStringArray[i + 1]);

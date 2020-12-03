@@ -66,8 +66,8 @@ public class AddExercise extends AppCompatActivity {
         Button bDeleteExercise = findViewById(R.id.deleteExerciseButton);
         bDeleteExercise.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
-                // TODO: Get exercise ID and then delete item from there
-                // TODO: first need to have extras from WorkoutList fill in info.
+                // Get exercise ID and then delete item from there
+                // first need to have extras from WorkoutList fill in info.
                 // Then, when info is filled out, only then can an exercise be deleted. Otherwise, there is no exercise to delete.
                 if (sentExerciseID > -1) {
                     ExerciseDataSource ds = new ExerciseDataSource(AddExercise.this);
@@ -186,7 +186,7 @@ public class AddExercise extends AppCompatActivity {
                 }
                 currentExercise.setReps(Integer.parseInt(etReps.getText().toString()));
 
-                // TODO: see if need to implement hideKeyboard method
+                // see if need to implement hideKeyboard method
 //                hideKeyboard();
 
                 boolean wasSuccessful = false;

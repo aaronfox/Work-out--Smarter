@@ -90,7 +90,7 @@ public class ExerciseAdapter extends RecyclerView.Adapter {
                 @Override
                 public void onClick(View view) {
                     // Don't delete item. Just return item id to remove from RV of workoutlist
-                    // TODO: need context of workoutlist that called this not just a new workoutlist
+                    // need context of workoutlist that called this not just a new workoutlist
                     WorkoutList workoutList = (WorkoutList) parentContext;
 //                    WorkoutList workoutList = new WorkoutList(parentContext);
                     Exercise exercise = exerciseData.get(position);

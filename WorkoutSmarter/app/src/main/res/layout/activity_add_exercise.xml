@@ -24,12 +24,12 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@android:color/holo_red_dark"
-                android:text="Delete Exercise from DB" />
+                android:text="@string/delete_exercise_from_db" />
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Add Exercise"
+                android:text="@string/add_exercise_"
                 android:textAlignment="center"
                 android:textSize="24sp" />
 
@@ -44,7 +44,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="Exercise Name:" />
+                    android:text="@string/exercise_name_" />
 
                 <EditText
                     android:id="@+id/exerciseNameEditText"
@@ -52,7 +52,8 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:ems="10"
-                    android:inputType="textPersonName" />
+                    android:inputType="textPersonName"
+                    android:importantForAutofill="no" />
             </LinearLayout>
 
             <LinearLayout
@@ -66,7 +67,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="Calories Burned:" />
+                    android:text="@string/calories_burned" />
 
                 <EditText
                     android:id="@+id/caloriesBurnedEditText"
@@ -74,7 +75,8 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:ems="10"
-                    android:inputType="number" />
+                    android:inputType="number"
+                    android:importantForAutofill="no" />
             </LinearLayout>
 
             <LinearLayout
@@ -87,7 +89,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="Muscle Group:" />
+                    android:text="@string/muscle_group_" />
 
                 <Spinner
                     android:id="@+id/muscleGroupSpinner"
@@ -106,7 +108,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="Reps:" />
+                    android:text="@string/reps" />
 
                 <EditText
                     android:id="@+id/repsEditText"
@@ -114,14 +116,15 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:ems="10"
-                    android:inputType="number" />
+                    android:inputType="number"
+                    android:importantForAutofill="no" />
             </LinearLayout>
 
             <Button
                 android:id="@+id/saveExerciseButton"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Save" />
+                android:text="@string/save" />
 
             <LinearLayout
                 android:layout_width="match_parent"

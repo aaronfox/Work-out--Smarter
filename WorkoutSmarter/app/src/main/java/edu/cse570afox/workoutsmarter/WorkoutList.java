@@ -54,7 +54,6 @@ public class WorkoutList extends AppCompatActivity {
             startActivity(intent);
         }
     };
-    // TODO: left off on completing workoutlist on lecture 6 pt 2 page 10
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -370,8 +369,8 @@ public class WorkoutList extends AppCompatActivity {
 
         // Update workout to reflect current workout
         Log.v(TAG, "!!!updating recycler view!");
-        // TODO: Get every exercise that is in workout then add it to RecyclerView
-        // ALSO TODO: correctly edit exercise info when a user clicks on the workout in the MainActivity.
+        // Get every exercise that is in workout then add it to RecyclerView
+        //  edit exercise info when a user clicks on the workout in the MainActivity.
         // Need to get exercise id from exercises list first
         SQLiteDatabase db = new WorkoutDBHelper(WorkoutList.this).getReadableDatabase();
         String query = "SELECT * FROM workout WHERE _id =" + id;
@@ -408,7 +407,7 @@ public class WorkoutList extends AppCompatActivity {
         if (exercisesInfoStringArray.length > 5) {
             for (int i = 0; i < exercisesInfoStringArray.length; i += 5) {
                 Exercise newExercise = new Exercise();
-                // TODO add exercise ID to list
+                // add exercise ID to list
 //            newExercise.setExerciseID(Integer.parseInt(exercisesInfoStringArray[i]));
                 newExercise.setExerciseID(Integer.parseInt(exercisesInfoStringArray[i]));
                 newExercise.setExerciseName(exercisesInfoStringArray[i+1]);

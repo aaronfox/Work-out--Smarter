@@ -31,7 +31,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
-        android:text="Current Workouts:"
+        android:text="@string/current_workouts"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/addNewWorkoutButton" />
 
@@ -52,7 +52,7 @@
         android:id="@+id/deleteSwitch"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Delete"
+        android:text="@string/delete"
         app:layout_constraintBottom_toBottomOf="@+id/addNewWorkoutButton"
         app:layout_constraintEnd_toStartOf="@+id/addNewWorkoutButton"
         app:layout_constraintStart_toStartOf="parent"
